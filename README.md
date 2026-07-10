@@ -17,8 +17,9 @@ Upgrade protocol notes:
 - request packets use RPL request/ack semantics
 - data-bearing responses are separate packets carrying the original `req_id`
 - `WriteChunkRequest` currently uses a fixed 1024-byte payload ceiling
-- `data_size` tells the receiver how many bytes inside the fixed chunk buffer
-  are valid for the current transfer
+- `data_size` is the aligned flash-programming length for the current chunk
+- `valid_size` is the logical image byte count inside that chunk; trailing bytes
+  are `0xFF` padding when `valid_size < data_size`
 - `FirmwareImage` / `ChunkPlan` / `UpgradePlan` are transport-agnostic helpers
   for image CRC calculation, aligned chunking, and request packet building
 - USB send/receive, retries, session state machines, and bootloader flash logic

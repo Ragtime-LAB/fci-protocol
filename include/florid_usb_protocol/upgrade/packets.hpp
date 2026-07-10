@@ -66,10 +66,12 @@ struct WriteChunkRequest {
     std::uint8_t reserved0;
     std::uint32_t session_id;
     std::uint32_t offset;
-    // Valid bytes in `data`. The trailing part of the fixed-size buffer is
-    // ignored when `data_size < kWriteChunkPayloadBytes`.
+    // Actual bytes to program into flash. Must satisfy the target write
+    // alignment requirements.
     std::uint16_t data_size;
-    std::uint16_t reserved1;
+    // Logical image bytes carried in `data`. Must be <= data_size. The trailing
+    // bytes are padding when valid_size < data_size.
+    std::uint16_t valid_size;
     std::uint32_t chunk_crc32;
     std::uint8_t data[kWriteChunkPayloadBytes];
 } __attribute__((packed));
@@ -82,8 +84,8 @@ struct ChunkWrittenResponse {
     std::uint32_t session_id;
     std::uint32_t accepted_offset;
     std::uint32_t total_written;
-    std::uint16_t accepted_size;
-    std::uint16_t reserved1;
+    std::uint16_t accepted_data_size;
+    std::uint16_t accepted_valid_size;
     std::uint32_t chunk_crc32;
 } __attribute__((packed));
 

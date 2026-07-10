@@ -22,7 +22,6 @@ enum class UpgradePlanError : std::uint8_t {
 
 struct ChunkRequest {
     WriteChunkRequest packet{};
-    std::uint16_t valid_size = 0;
 };
 
 class UpgradePlan {

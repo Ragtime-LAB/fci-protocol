@@ -117,12 +117,11 @@ tl::expected<ChunkRequest, UpgradePlanError> UpgradePlan::make_chunk_request(
     request.packet.session_id = session_id;
     request.packet.offset = chunk->offset;
     request.packet.data_size = chunk->transmit_size;
-    request.packet.reserved1 = 0;
+    request.packet.valid_size = chunk->valid_size;
     request.packet.chunk_crc32 = chunk->crc32;
     std::memcpy(request.packet.data,
                 chunk->transmit_payload.data(),
                 chunk->transmit_payload.size());
-    request.valid_size = chunk->valid_size;
     return request;
 }
 
