@@ -4,7 +4,7 @@ This repository holds the shared USB protocol definitions used by `Usb2Arm`.
 
 Current scope:
 - bootloader upgrade protocol on top of RPL USB framing
-- packet definitions only
+- packet definitions plus host/device shared upgrade image helpers
 - platform-independent transport alias for `RPL::USBTransport`
 
 Main header:
@@ -19,3 +19,7 @@ Upgrade protocol notes:
 - `WriteChunkRequest` currently uses a fixed 1024-byte payload ceiling
 - `data_size` tells the receiver how many bytes inside the fixed chunk buffer
   are valid for the current transfer
+- `FirmwareImage` / `ChunkPlan` / `UpgradePlan` are transport-agnostic helpers
+  for image CRC calculation, aligned chunking, and request packet building
+- USB send/receive, retries, session state machines, and bootloader flash logic
+  still belong in product code rather than this shared protocol library
