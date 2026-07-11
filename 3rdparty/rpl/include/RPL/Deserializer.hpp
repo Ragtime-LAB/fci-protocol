@@ -231,6 +231,17 @@ public:
         pool.buffer[Collector::template type_index<T>()]);
   };
 
+  template <typename T>
+    requires Deserializable<T, Ts...>
+  uint32_t version() const noexcept {
+    constexpr auto seq_idx = Collector::template type_seq_index<T>();
+#ifdef RPL_USE_STD_ATOMIC
+    return versions_[seq_idx].load(std::memory_order_acquire);
+#else
+    return versions_[seq_idx];
+#endif
+  }
+
   /**
    * @brief 获取指定命令码的写入指针
    *
