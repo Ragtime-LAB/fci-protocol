@@ -7,6 +7,8 @@
 #include <cstddef>
 #include <cstdint>
 
+#pragma pack(push, 1)
+
 namespace florid::usb::upgrade {
 
 struct Version {
@@ -14,11 +16,11 @@ struct Version {
     std::uint8_t minor;
     std::uint8_t revision;
     std::uint8_t build;
-} __attribute__((packed));
+};
 
 struct GetBootStatusRequest {
     std::uint8_t req_id;
-} __attribute__((packed));
+};
 
 struct BootStatusResponse {
     std::uint8_t req_id;
@@ -36,7 +38,7 @@ struct BootStatusResponse {
     std::uint32_t slot1_address;
     std::uint32_t slot1_size;
     std::uint32_t bytes_written;
-} __attribute__((packed));
+};
 
 struct StartUpgradeRequest {
     std::uint8_t req_id;
@@ -46,7 +48,7 @@ struct StartUpgradeRequest {
     Version version;
     std::uint32_t image_size;
     std::uint32_t image_crc32;
-} __attribute__((packed));
+};
 
 struct StartUpgradeResponse {
     std::uint8_t req_id;
@@ -57,7 +59,7 @@ struct StartUpgradeResponse {
     std::uint32_t next_offset;
     std::uint16_t write_align;
     std::uint16_t max_chunk_size;
-} __attribute__((packed));
+};
 
 struct WriteChunkRequest {
     std::uint8_t req_id;
@@ -74,7 +76,7 @@ struct WriteChunkRequest {
     std::uint16_t valid_size;
     std::uint32_t chunk_crc32;
     std::uint8_t data[kWriteChunkPayloadBytes];
-} __attribute__((packed));
+};
 
 struct ChunkWrittenResponse {
     std::uint8_t req_id;
@@ -87,7 +89,7 @@ struct ChunkWrittenResponse {
     std::uint16_t accepted_data_size;
     std::uint16_t accepted_valid_size;
     std::uint32_t chunk_crc32;
-} __attribute__((packed));
+};
 
 struct FinishUpgradeRequest {
     std::uint8_t req_id;
@@ -97,7 +99,7 @@ struct FinishUpgradeRequest {
     std::uint32_t session_id;
     std::uint32_t image_size;
     std::uint32_t image_crc32;
-} __attribute__((packed));
+};
 
 struct FinishUpgradeResponse {
     std::uint8_t req_id;
@@ -106,7 +108,7 @@ struct FinishUpgradeResponse {
     std::uint8_t result_flags;
     std::uint32_t session_id;
     std::uint32_t total_written;
-} __attribute__((packed));
+};
 
 struct AbortUpgradeRequest {
     std::uint8_t req_id;
@@ -114,7 +116,7 @@ struct AbortUpgradeRequest {
     std::uint8_t target_slot;
     std::uint8_t flags;
     std::uint32_t session_id;
-} __attribute__((packed));
+};
 
 struct UpgradeAbortedResponse {
     std::uint8_t req_id;
@@ -122,35 +124,35 @@ struct UpgradeAbortedResponse {
     std::uint8_t target_slot;
     std::uint8_t result_flags;
     std::uint32_t session_id;
-} __attribute__((packed));
+};
 
 struct SetPendingRequest {
     std::uint8_t req_id;
     std::uint8_t image_id;
     std::uint8_t target_slot;
     std::uint8_t flags;
-} __attribute__((packed));
+};
 
 struct PendingSetResponse {
     std::uint8_t req_id;
     std::uint8_t image_id;
     std::uint8_t target_slot;
     std::uint8_t applied_flags;
-} __attribute__((packed));
+};
 
 struct RebootRequest {
     std::uint8_t req_id;
     std::uint8_t mode;
     std::uint8_t reserved0;
     std::uint8_t reserved1;
-} __attribute__((packed));
+};
 
 struct RebootingResponse {
     std::uint8_t req_id;
     std::uint8_t mode;
     std::uint8_t reserved0;
     std::uint8_t reserved1;
-} __attribute__((packed));
+};
 
 static_assert(sizeof(Version) == 4);
 static_assert(sizeof(GetBootStatusRequest) <= 0xFF);
@@ -169,6 +171,8 @@ static_assert(sizeof(RebootRequest) <= 0xFF);
 static_assert(sizeof(RebootingResponse) <= 0xFF);
 
 } // namespace florid::usb::upgrade
+
+#pragma pack(pop)
 
 template <>
 struct RPL::Meta::PacketTraits<florid::usb::upgrade::GetBootStatusRequest>

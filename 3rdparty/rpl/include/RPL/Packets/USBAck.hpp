@@ -4,10 +4,14 @@
 #include "RPL/Meta/PacketTraits.hpp"
 #include <cstdint>
 
+#pragma pack(push, 1)
+
 struct USBAck {
   uint8_t req_id;
   uint8_t status;
-} __attribute__((packed));
+};
+
+#pragma pack(pop)
 
 template <>
 struct RPL::Meta::PacketTraits<USBAck>

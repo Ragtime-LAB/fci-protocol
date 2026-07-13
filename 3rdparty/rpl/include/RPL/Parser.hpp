@@ -321,20 +321,17 @@ template <typename... Args> class Parser {
       std::array<uint8_t, 256> table;
       table.fill(0xFF);
 
-      auto register_worker = [&table]<typename W>(size_t index) {
-        uint8_t sb = W::Protocol::start_byte;
-        if (table[sb] != 0xFF && table[sb] != index) {
-          RPL_ERROR_START_BYTE_COLLISION();
-        }
-        table[sb] = static_cast<uint8_t>(index);
-      };
-
-      auto helper =
-          [&register_worker]<typename... Ws>(Details::TypeList<Ws...>) {
-            size_t idx = 0;
-            ((register_worker.template operator()<Ws>(idx++)), ...);
-          };
-      helper(UniqueWorkers{});
+      []<typename... Ws>(std::array<uint8_t, 256>& tbl,
+                           Details::TypeList<Ws...>) {
+        size_t idx = 0;
+        ((tbl[Ws::Protocol::start_byte] =
+              (tbl[Ws::Protocol::start_byte] == 0xFF
+                   ? static_cast<uint8_t>(idx)
+                   : (RPL_ERROR_START_BYTE_COLLISION(),
+                      static_cast<uint8_t>(idx))),
+          idx++),
+         ...);
+      }(table, UniqueWorkers{});
 
       return table;
     }();
