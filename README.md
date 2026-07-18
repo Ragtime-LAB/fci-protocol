@@ -24,3 +24,22 @@ Upgrade protocol notes:
   for image CRC calculation, aligned chunking, and request packet building
 - USB send/receive, retries, session state machines, and bootloader flash logic
   still belong in product code rather than this shared protocol library
+
+Zephyr module support:
+- `zephyr/module.yml` exposes this repository as a standard Zephyr module
+- `zephyr/Kconfig` gates the library behind `CONFIG_FLORID_USB_PROTOCOL`
+- root `CMakeLists.txt` detects `ZEPHYR_BASE` and dispatches to
+  `cmake/Zephyr.cmake`; otherwise it behaves like a normal standalone CMake
+  subproject
+
+Recommended Zephyr integration boundary:
+- this library owns packet definitions, RPL transport types, image/chunk
+  helpers, and request/response builders
+- the Zephyr app owns USB CDC I/O, protocol mode switching, upgrade policy,
+  `UpgradeManager`, slot writes, and reboot policy
+- a thin adapter layer should decode protocol requests and forward only the
+  product-level actions upward, typically:
+  - fill/respond boot status
+  - request enter-upgrade mode
+  - request reboot
+  - pump transport RX/TX bytes between CDC and the protocol transport

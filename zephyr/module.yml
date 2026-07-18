@@ -1,0 +1,4 @@
+name: florid_usb_protocol
+build:
+  cmake: .
+  kconfig: zephyr/Kconfig
