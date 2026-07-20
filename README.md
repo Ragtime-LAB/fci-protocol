@@ -3,8 +3,8 @@
 This repository holds the shared USB protocol definitions used by `Usb2Arm`.
 
 Current scope:
-- bootloader upgrade protocol on top of RPL USB framing
-- packet definitions plus host/device shared upgrade image helpers
+- bootloader control protocol on top of RPL USB framing
+- packet definitions and shared transport alias
 - platform-independent transport alias for `RPL::USBTransport`
 
 Main header:
@@ -16,14 +16,8 @@ Main header:
 Upgrade protocol notes:
 - request packets use RPL request/ack semantics
 - data-bearing responses are separate packets carrying the original `req_id`
-- `WriteChunkRequest` currently uses a fixed 1024-byte payload ceiling
-- `data_size` is the aligned flash-programming length for the current chunk
-- `valid_size` is the logical image byte count inside that chunk; trailing bytes
-  are `0xFF` padding when `valid_size < data_size`
-- `FirmwareImage` / `ChunkPlan` / `UpgradePlan` are transport-agnostic helpers
-  for image CRC calculation, aligned chunking, and request packet building
-- USB send/receive, retries, session state machines, and bootloader flash logic
-  still belong in product code rather than this shared protocol library
+- this tree now only carries boot status, upgrade-mode switch, and reboot
+  control packets; image upload is handled elsewhere
 
 Zephyr module support:
 - `zephyr/module.yml` exposes this repository as a standard Zephyr module
@@ -33,8 +27,7 @@ Zephyr module support:
   subproject
 
 Recommended Zephyr integration boundary:
-- this library owns packet definitions, RPL transport types, image/chunk
-  helpers, and request/response builders
+- this library owns packet definitions and RPL transport types
 - the Zephyr app owns USB CDC I/O, protocol mode switching, upgrade policy,
   `UpgradeManager`, slot writes, and reboot policy
 - a thin adapter layer should decode protocol requests and forward only the

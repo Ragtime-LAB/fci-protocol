@@ -1,32 +1,17 @@
 #ifndef FLORID_USB_PROTOCOL_UPGRADE_CONSTANTS_HPP
 #define FLORID_USB_PROTOCOL_UPGRADE_CONSTANTS_HPP
 
-#include <cstddef>
 #include <cstdint>
 
 namespace florid::usb::upgrade {
 
 inline constexpr std::uint8_t kProtocolVersion = 1;
 
-// The vendored RPL USB framing now uses a 2-byte payload length field, so
-// upgrade chunks no longer need to fit inside a 255-byte frame. Keep the
-// default chunk size moderate for full-speed USB CDC latency and bootloader
-// RAM usage.
-inline constexpr std::size_t kWriteChunkPayloadBytes = 1024;
-
 enum class Command : std::uint8_t {
     GetBootStatusRequest = 0x10,
     BootStatusResponse = 0x11,
     StartUpgradeRequest = 0x12,
     StartUpgradeResponse = 0x13,
-    WriteChunkRequest = 0x14,
-    ChunkWrittenResponse = 0x15,
-    FinishUpgradeRequest = 0x16,
-    FinishUpgradeResponse = 0x17,
-    AbortUpgradeRequest = 0x18,
-    UpgradeAbortedResponse = 0x19,
-    SetPendingRequest = 0x1A,
-    PendingSetResponse = 0x1B,
     RebootRequest = 0x1C,
     RebootingResponse = 0x1D,
 };
@@ -78,12 +63,6 @@ enum class StartUpgradeFlags : std::uint8_t {
     ForceErase = 1u << 1,
 };
 
-enum class SetPendingFlags : std::uint8_t {
-    None = 0,
-    Permanent = 1u << 0,
-    ConfirmOnly = 1u << 1,
-};
-
 enum class RebootMode : std::uint8_t {
     Normal = 0,
     StayInRecovery = 1,
@@ -121,11 +100,6 @@ constexpr std::uint8_t to_u8(RecoveryReason value)
 }
 
 constexpr std::uint8_t to_u8(StartUpgradeFlags value)
-{
-    return static_cast<std::uint8_t>(value);
-}
-
-constexpr std::uint8_t to_u8(SetPendingFlags value)
 {
     return static_cast<std::uint8_t>(value);
 }

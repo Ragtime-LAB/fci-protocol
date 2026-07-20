@@ -14,14 +14,6 @@ using Transport = RPL::USBTransportFn<
     BootStatusResponse,
     StartUpgradeRequest,
     StartUpgradeResponse,
-    WriteChunkRequest,
-    ChunkWrittenResponse,
-    FinishUpgradeRequest,
-    FinishUpgradeResponse,
-    AbortUpgradeRequest,
-    UpgradeAbortedResponse,
-    SetPendingRequest,
-    PendingSetResponse,
     RebootRequest,
     RebootingResponse>;
 
