@@ -1,8 +1,6 @@
 menuconfig FLORID_USB_PROTOCOL
     bool "Florid USB protocol library"
-    select CPP
-    select STD_CPP20
-    select REQUIRES_FULL_LIBCPP
+    depends on CPP
     help
       Enable the shared Florid USB protocol library and the vendored
       RPL-based packet definitions it depends on.
