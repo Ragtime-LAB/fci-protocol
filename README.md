@@ -3,9 +3,10 @@
 This repository holds the shared USB protocol definitions used by `Usb2Arm`.
 
 Current scope:
-- bootloader control protocol on top of RPL USB framing
-- packet definitions and shared transport alias
-- platform-independent transport alias for `RPL::USBTransport`
+- bootloader control protocol on top of the vendored RPL framing
+- packet definitions grouped under `message/`
+- stream-session aliases grouped under `session/`
+- byte-stream callback adapters grouped under `transport/`
 
 Main header:
 
@@ -13,7 +14,17 @@ Main header:
 #include <florid_usb_protocol/protocol.hpp>
 ```
 
-Upgrade protocol notes:
+Current layout:
+- `florid_usb_protocol/message/upgrade.hpp`
+  - shared upgrade-control packet structs
+- `florid_usb_protocol/session/stream_session.hpp`
+  - generic stream-session alias over the vendored RPL request/ack machinery
+- `florid_usb_protocol/session/upgrade_control_session.hpp`
+  - the current upgrade-control message set bound onto a stream session
+- `florid_usb_protocol/transport/byte_stream_transport.hpp`
+  - small callback-based byte-stream adapters for USB CDC, TCP, or similar links
+
+Upgrade control notes:
 - request packets use RPL request/ack semantics
 - data-bearing responses are separate packets carrying the original `req_id`
 - this tree now only carries boot status, upgrade-mode switch, and reboot
@@ -27,7 +38,8 @@ Zephyr module support:
   subproject
 
 Recommended Zephyr integration boundary:
-- this library owns packet definitions and RPL transport types
+- this library owns packet definitions, stream-session aliases, and byte-stream
+  transport adapters
 - the Zephyr app owns USB CDC I/O, protocol mode switching, upgrade policy,
   `UpgradeManager`, slot writes, and reboot policy
 - a thin adapter layer should decode protocol requests and forward only the
