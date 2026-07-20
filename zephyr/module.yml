@@ -1,4 +1,4 @@
-name: florid_usb_protocol
+name: fci_protocol
 build:
   cmake: .
   kconfig: zephyr/Kconfig

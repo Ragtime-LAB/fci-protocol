@@ -1,5 +1,5 @@
-#ifndef FLORID_USB_PROTOCOL_TRANSPORT_BYTE_STREAM_TRANSPORT_HPP
-#define FLORID_USB_PROTOCOL_TRANSPORT_BYTE_STREAM_TRANSPORT_HPP
+#ifndef FCI_PROTOCOL_TRANSPORT_BYTE_STREAM_TRANSPORT_HPP
+#define FCI_PROTOCOL_TRANSPORT_BYTE_STREAM_TRANSPORT_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -7,7 +7,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace florid::usb::transport {
+namespace fci::transport {
 
 template <typename WriteCallback>
 class ByteStreamTransport {
@@ -45,6 +45,6 @@ using FunctionByteStreamTransport =
 using FunctionPointerByteStreamTransport =
     ByteStreamTransport<void (*)(const std::uint8_t*, std::size_t)>;
 
-} // namespace florid::usb::transport
+} // namespace fci::transport
 
-#endif // FLORID_USB_PROTOCOL_TRANSPORT_BYTE_STREAM_TRANSPORT_HPP
+#endif // FCI_PROTOCOL_TRANSPORT_BYTE_STREAM_TRANSPORT_HPP

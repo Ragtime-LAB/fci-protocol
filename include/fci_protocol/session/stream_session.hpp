@@ -1,10 +1,10 @@
-#ifndef FLORID_USB_PROTOCOL_SESSION_STREAM_SESSION_HPP
-#define FLORID_USB_PROTOCOL_SESSION_STREAM_SESSION_HPP
+#ifndef FCI_PROTOCOL_SESSION_STREAM_SESSION_HPP
+#define FCI_PROTOCOL_SESSION_STREAM_SESSION_HPP
 
 #include "RPL/Packets/USBAck.hpp"
 #include "RPL/USBTransport.hpp"
 
-namespace florid::usb::session {
+namespace fci::session {
 
 template <typename TickProvider, typename SendTransport, typename... Packets>
 using StreamSession = RPL::USBTransport<
@@ -13,6 +13,6 @@ using StreamSession = RPL::USBTransport<
     USBAck,
     Packets...>;
 
-} // namespace florid::usb::session
+} // namespace fci::session
 
-#endif // FLORID_USB_PROTOCOL_SESSION_STREAM_SESSION_HPP
+#endif // FCI_PROTOCOL_SESSION_STREAM_SESSION_HPP

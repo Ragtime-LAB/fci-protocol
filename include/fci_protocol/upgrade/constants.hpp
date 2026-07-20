@@ -1,9 +1,9 @@
-#ifndef FLORID_USB_PROTOCOL_UPGRADE_CONSTANTS_HPP
-#define FLORID_USB_PROTOCOL_UPGRADE_CONSTANTS_HPP
+#ifndef FCI_PROTOCOL_UPGRADE_CONSTANTS_HPP
+#define FCI_PROTOCOL_UPGRADE_CONSTANTS_HPP
 
 #include <cstdint>
 
-namespace florid::usb::upgrade {
+namespace fci::upgrade {
 
 inline constexpr std::uint8_t kProtocolVersion = 1;
 
@@ -109,6 +109,6 @@ constexpr std::uint8_t to_u8(RebootMode value)
     return static_cast<std::uint8_t>(value);
 }
 
-} // namespace florid::usb::upgrade
+} // namespace fci::upgrade
 
-#endif // FLORID_USB_PROTOCOL_UPGRADE_CONSTANTS_HPP
+#endif // FCI_PROTOCOL_UPGRADE_CONSTANTS_HPP

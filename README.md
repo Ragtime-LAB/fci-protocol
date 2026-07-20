@@ -1,6 +1,6 @@
-# florid_usb_protocol
+# fci_protocol
 
-This repository holds the shared USB protocol definitions used by `Usb2Arm`.
+This repository holds the shared protocol definitions used by `Usb2Arm`.
 
 Current scope:
 - bootloader control protocol on top of the vendored RPL framing
@@ -11,18 +11,18 @@ Current scope:
 Main header:
 
 ```cpp
-#include <florid_usb_protocol/protocol.hpp>
+#include <fci_protocol/protocol.hpp>
 ```
 
 Current layout:
-- `florid_usb_protocol/message/upgrade.hpp`
+- `fci_protocol/message/upgrade.hpp`
   - shared upgrade-control packet structs
-- `florid_usb_protocol/session/stream_session.hpp`
+- `fci_protocol/session/stream_session.hpp`
   - generic stream-session alias over the vendored RPL request/ack machinery
-- `florid_usb_protocol/session/upgrade_control_session.hpp`
+- `fci_protocol/session/upgrade_control_session.hpp`
   - the current upgrade-control message set bound onto a stream session
-- `florid_usb_protocol/transport/byte_stream_transport.hpp`
-  - small callback-based byte-stream adapters for USB CDC, TCP, or similar links
+- `fci_protocol/transport/byte_stream_transport.hpp`
+  - small callback-based byte-stream adapters for CDC, TCP, or similar links
 
 Upgrade control notes:
 - request packets use RPL request/ack semantics
@@ -32,7 +32,7 @@ Upgrade control notes:
 
 Zephyr module support:
 - `zephyr/module.yml` exposes this repository as a standard Zephyr module
-- `zephyr/Kconfig` gates the library behind `CONFIG_FLORID_USB_PROTOCOL`
+- `zephyr/Kconfig` gates the library behind `CONFIG_FCI_PROTOCOL`
 - root `CMakeLists.txt` detects `ZEPHYR_BASE` and dispatches to
   `cmake/Zephyr.cmake`; otherwise it behaves like a normal standalone CMake
   subproject

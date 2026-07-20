@@ -1,6 +1,6 @@
-menuconfig FLORID_USB_PROTOCOL
-    bool "Florid USB protocol library"
+menuconfig FCI_PROTOCOL
+    bool "FCI protocol library"
     depends on CPP
     help
-      Enable the shared Florid USB protocol library and the vendored
+      Enable the shared FCI protocol library and the vendored
       RPL-based packet definitions it depends on.
