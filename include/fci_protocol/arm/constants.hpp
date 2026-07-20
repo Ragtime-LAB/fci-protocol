@@ -3,11 +3,13 @@
 
 #include <cstdint>
 
+#include "fci_protocol/version.hpp"
+
 namespace fci::arm {
 
 using TransactionId = std::uint32_t;
 
-inline constexpr std::uint8_t kProtocolVersion = 1;
+inline constexpr fci::Semver kProtocolVersion = fci::MakeSemver(1, 0, 0);
 
 enum class Command : std::uint16_t {
     // ── Telemetry (firmware → host, notification) ──

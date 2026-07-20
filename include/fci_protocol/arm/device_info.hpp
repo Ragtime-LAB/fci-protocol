@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <array>
 
+#include "fci_protocol/version.hpp"
 #include "fci_protocol/arm/constants.hpp"
 
 #pragma pack(push, 1)
@@ -15,8 +16,8 @@ namespace fci::arm {
 // ──────────────────────────────────────────────
 
 struct DeviceInfo {
-    std::uint8_t protocol_version; // kProtocolVersion
-    std::uint8_t hw_revision;      // PCB revision (A=0, B=1, ...)
+    fci::Semver protocol_version;  // kProtocolVersion as semver
+    fci::Semver fw_version;        // firmware semantic version
     std::array<char, 32> board_name;
     std::array<char, 32> custom_name;
 };

@@ -3,9 +3,11 @@
 
 #include <cstdint>
 
+#include "fci_protocol/version.hpp"
+
 namespace fci::upgrade {
 
-inline constexpr std::uint8_t kProtocolVersion = 1;
+inline constexpr fci::Semver kProtocolVersion = fci::MakeSemver(1, 0, 0);
 
 enum class Command : std::uint8_t {
     GetBootStatusRequest = 0x10,
