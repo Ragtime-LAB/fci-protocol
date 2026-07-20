@@ -4,7 +4,7 @@ endif()
 
 zephyr_library_named(florid_usb_protocol)
 
-zephyr_library_include_directories(
+zephyr_include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/../include
     ${CMAKE_CURRENT_LIST_DIR}/../3rdparty/rpl/include
 )
