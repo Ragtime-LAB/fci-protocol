@@ -28,9 +28,6 @@ struct GripperStatus {
     float q;
     float dq;
     float tau;
-    float temp_c;
-    std::uint8_t enabled;
-    std::uint8_t _pad[3];
 };
 
 struct ArmStatus {
@@ -74,12 +71,6 @@ struct AckPacket {
 //  Command payloads (request body)
 // ──────────────────────────────────────────────
 
-struct SetMitLimitCommand {
-    std::uint8_t joint_id;
-    float torque_limit_nm;
-    float velocity_limit_rps;
-};
-
 struct SetMotorStateCommand {
     std::uint8_t joint_id;
     MotorStateValue state;
@@ -102,17 +93,8 @@ struct HomeAllCommand {
     std::uint8_t dummy;
 };
 
-struct RunCalibrationCommand {
-    CalibrationType calib_type;
-};
-
 struct ClearFaultsCommand {
     std::uint8_t dummy;
-};
-
-struct SetSafetyCommand {
-    float e_stop_deceleration_dps2;
-    float max_payload_kg;
 };
 
 struct SdkClientConnectedCommand {
@@ -172,10 +154,6 @@ struct SetLoadCommand {
 //  Response payloads
 // ──────────────────────────────────────────────
 
-struct SetMitLimitResponse {
-    SetMitLimitStatus status;
-};
-
 struct SetMotorStateResponse {
     SetMotorStateStatus status;
 };
@@ -196,16 +174,8 @@ struct HomeAllResponse {
     HomeAllStatus status;
 };
 
-struct RunCalibrationResponse {
-    RunCalibrationStatus status;
-};
-
 struct ClearFaultsResponse {
     ClearFaultsStatus status;
-};
-
-struct SetSafetyResponse {
-    SetSafetyStatus status;
 };
 
 struct SdkClientNotifyResponse {
@@ -256,11 +226,6 @@ struct SetLoadResponse {
 //  Request packets (host → firmware)
 // ──────────────────────────────────────────────
 
-struct SetMitLimitRequestPacket {
-    TransactionId tx_id;
-    SetMitLimitCommand payload;
-};
-
 struct SetMotorStateRequestPacket {
     TransactionId tx_id;
     SetMotorStateCommand payload;
@@ -286,19 +251,9 @@ struct HomeAllRequestPacket {
     HomeAllCommand payload;
 };
 
-struct RunCalibrationRequestPacket {
-    TransactionId tx_id;
-    RunCalibrationCommand payload;
-};
-
 struct ClearFaultsRequestPacket {
     TransactionId tx_id;
     ClearFaultsCommand payload;
-};
-
-struct SetSafetyRequestPacket {
-    TransactionId tx_id;
-    SetSafetyCommand payload;
 };
 
 struct SdkClientConnectedRequestPacket {
@@ -365,11 +320,6 @@ struct SetLoadRequestPacket {
 //  Response packets (firmware → host)
 // ──────────────────────────────────────────────
 
-struct SetMitLimitResponsePacket {
-    TransactionId tx_id;
-    SetMitLimitResponse payload;
-};
-
 struct SetMotorStateResponsePacket {
     TransactionId tx_id;
     SetMotorStateResponse payload;
@@ -395,19 +345,9 @@ struct HomeAllResponsePacket {
     HomeAllResponse payload;
 };
 
-struct RunCalibrationResponsePacket {
-    TransactionId tx_id;
-    RunCalibrationResponse payload;
-};
-
 struct ClearFaultsResponsePacket {
     TransactionId tx_id;
     ClearFaultsResponse payload;
-};
-
-struct SetSafetyResponsePacket {
-    TransactionId tx_id;
-    SetSafetyResponse payload;
 };
 
 struct SdkClientConnectedResponsePacket {
@@ -474,7 +414,7 @@ struct SetLoadResponsePacket {
 //  Real-time control (fire-and-forget, no tx_id)
 // ──────────────────────────────────────────────
 
-struct JointCommandPacket {
+struct JointMITCommandPacket {
     float q[6];
     float dq[6];
     float tau[6];
@@ -492,13 +432,13 @@ struct JointPosVelCommandPacket {
     std::uint16_t seq;
 };
 
-struct JointVelocityCommandPacket {
+struct JointVelCommandPacket {
     float dq[6];
     std::uint8_t enabled_mask;
     std::uint16_t seq;
 };
 
-struct JointHybridCommandPacket {
+struct JointPVTCommandPacket {
     float q[6];
     float dq_limit[6];
     float current_limit_norm[6];
@@ -585,26 +525,6 @@ struct PacketTraits<fci::arm::AckPacket>
     static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Ack;
-};
-
-template <>
-struct PacketTraits<fci::arm::SetMitLimitRequestPacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::SetMitLimitRequestPacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetMitLimitRequest);
-    static constexpr std::size_t size = sizeof(fci::arm::SetMitLimitRequestPacket);
-    static constexpr bool skip_memory_pool = true;
-    using Protocol = USBRequestProto;
-    static constexpr PacketCategory category = PacketCategory::Request;
-};
-
-template <>
-struct PacketTraits<fci::arm::SetMitLimitResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::SetMitLimitResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetMitLimitResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::SetMitLimitResponsePacket);
-    static constexpr bool skip_memory_pool = true;
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
 };
 
 template <>
@@ -708,26 +628,6 @@ struct PacketTraits<fci::arm::HomeAllResponsePacket>
 };
 
 template <>
-struct PacketTraits<fci::arm::RunCalibrationRequestPacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::RunCalibrationRequestPacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::RunCalibrationRequest);
-    static constexpr std::size_t size = sizeof(fci::arm::RunCalibrationRequestPacket);
-    static constexpr bool skip_memory_pool = true;
-    using Protocol = USBRequestProto;
-    static constexpr PacketCategory category = PacketCategory::Request;
-};
-
-template <>
-struct PacketTraits<fci::arm::RunCalibrationResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::RunCalibrationResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::RunCalibrationResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::RunCalibrationResponsePacket);
-    static constexpr bool skip_memory_pool = true;
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
-};
-
-template <>
 struct PacketTraits<fci::arm::ClearFaultsRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::ClearFaultsRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ClearFaultsRequest);
@@ -742,26 +642,6 @@ struct PacketTraits<fci::arm::ClearFaultsResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::ClearFaultsResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ClearFaultsResponse);
     static constexpr std::size_t size = sizeof(fci::arm::ClearFaultsResponsePacket);
-    static constexpr bool skip_memory_pool = true;
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
-};
-
-template <>
-struct PacketTraits<fci::arm::SetSafetyRequestPacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::SetSafetyRequestPacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetSafetyRequest);
-    static constexpr std::size_t size = sizeof(fci::arm::SetSafetyRequestPacket);
-    static constexpr bool skip_memory_pool = true;
-    using Protocol = USBRequestProto;
-    static constexpr PacketCategory category = PacketCategory::Request;
-};
-
-template <>
-struct PacketTraits<fci::arm::SetSafetyResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::SetSafetyResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetSafetyResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::SetSafetyResponsePacket);
     static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
@@ -888,10 +768,10 @@ struct PacketTraits<fci::arm::GetMotorFeedbackResponsePacket>
 };
 
 template <>
-struct PacketTraits<fci::arm::JointCommandPacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::JointCommandPacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::JointCommand);
-    static constexpr std::size_t size = sizeof(fci::arm::JointCommandPacket);
+struct PacketTraits<fci::arm::JointMITCommandPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::JointMITCommandPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::JointMITCommand);
+    static constexpr std::size_t size = sizeof(fci::arm::JointMITCommandPacket);
     static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
@@ -928,20 +808,20 @@ struct PacketTraits<fci::arm::JointPosVelCommandPacket>
 };
 
 template <>
-struct PacketTraits<fci::arm::JointVelocityCommandPacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::JointVelocityCommandPacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::JointVelocityCommand);
-    static constexpr std::size_t size = sizeof(fci::arm::JointVelocityCommandPacket);
+struct PacketTraits<fci::arm::JointVelCommandPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::JointVelCommandPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::JointVelCommand);
+    static constexpr std::size_t size = sizeof(fci::arm::JointVelCommandPacket);
     static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
 
 template <>
-struct PacketTraits<fci::arm::JointHybridCommandPacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::JointHybridCommandPacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::JointHybridCommand);
-    static constexpr std::size_t size = sizeof(fci::arm::JointHybridCommandPacket);
+struct PacketTraits<fci::arm::JointPVTCommandPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::JointPVTCommandPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::JointPVTCommand);
+    static constexpr std::size_t size = sizeof(fci::arm::JointPVTCommandPacket);
     static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;

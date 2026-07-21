@@ -27,11 +27,11 @@ enum class ModeRequestPriority : std::uint8_t {
 
 enum class PcControlKind : std::uint8_t {
     None = 0,
-    Mit,
+    MIT,
     MitGravity,
     PosVel,
     Velocity,
-    Hybrid,
+    PVT,
 };
 
 enum class SessionEventType : std::uint8_t {

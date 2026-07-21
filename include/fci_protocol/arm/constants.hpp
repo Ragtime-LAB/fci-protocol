@@ -22,8 +22,6 @@ namespace fci::arm
         Ack = 0x6FF0,
 
         // ── Reliable request / response pairs ──
-        SetMitLimitRequest = 0x6103,
-        SetMitLimitResponse = 0x6104,
         SetMotorStateRequest = 0x6105,
         SetMotorStateResponse = 0x6106,
         SetZeroRequest = 0x6107,
@@ -32,12 +30,8 @@ namespace fci::arm
         ClearErrorResponse = 0x610A,
         HomeAllRequest = 0x6201,
         HomeAllResponse = 0x6202,
-        RunCalibrationRequest = 0x6203,
-        RunCalibrationResponse = 0x6204,
         ClearFaultsRequest = 0x6205,
         ClearFaultsResponse = 0x6206,
-        SetSafetyRequest = 0x6207,
-        SetSafetyResponse = 0x6208,
         SdkClientConnectedRequest = 0x6209,
         SdkClientConnectedResponse = 0x620A,
         SdkClientDisconnectedRequest = 0x620B,
@@ -70,12 +64,12 @@ namespace fci::arm
         StopMotionResponse = 0x6226,
 
         // ── Real-time control (fire-and-forget, notification) ──
-        JointCommand = 0x6301,
+        JointMITCommand = 0x6301,
         EmergencyStop = 0x6303,
         GripperCommand = 0x6305,
         JointPosVelCommand = 0x6306,
-        JointVelocityCommand = 0x6307,
-        JointHybridCommand = 0x6308,
+        JointVelCommand = 0x6307,
+        JointPVTCommand = 0x6308,
         CartesianPoseCommand = 0x6309,
         CartesianVelocityCommand = 0x630A,
     };
@@ -88,13 +82,6 @@ namespace fci::arm
         Running = 2,
         Fault = 3,
         EStop = 4,
-    };
-
-    enum class SetMitLimitStatus : std::uint8_t
-    {
-        Ok = 0,
-        InvalidJoint = 1,
-        StorageFailed = 2,
     };
 
     enum class MotorStateValue : std::uint8_t
@@ -113,10 +100,10 @@ namespace fci::arm
 
     enum class MotorControlMode : std::uint8_t
     {
-        Mit = 1,
+        MIT = 1,
         PosVel = 2,
         Vel = 3,
-        Hybrid = 4,
+        PVT = 4,
     };
 
     enum class SetMotorControlModeStatus : std::uint8_t
@@ -148,19 +135,6 @@ namespace fci::arm
         CalibrationFailed = 2,
     };
 
-    enum class CalibrationType : std::uint8_t
-    {
-        Home = 0,
-        Zero = 1,
-    };
-
-    enum class RunCalibrationStatus : std::uint8_t
-    {
-        Ok = 0,
-        NotIdle = 1,
-        CalibrationFailed = 2,
-    };
-
     enum class ClearFaultsStatus : std::uint8_t
     {
         Ok = 0,
@@ -171,19 +145,6 @@ namespace fci::arm
         StandardArm = 0,
         MobileArm = 1,
         CobotArm = 2,
-    };
-
-    enum class CollisionSensitivity : std::uint8_t
-    {
-        Low = 0,
-        Medium = 1,
-        High = 2,
-    };
-
-    enum class SetSafetyStatus : std::uint8_t
-    {
-        Ok = 0,
-        StorageFailed = 1,
     };
 
     enum class SdkClientNotifyStatus : std::uint8_t
@@ -263,17 +224,7 @@ namespace fci::arm
         return static_cast<std::uint8_t>(value);
     }
 
-    constexpr std::uint8_t to_u8(CalibrationType value)
-    {
-        return static_cast<std::uint8_t>(value);
-    }
-
     constexpr std::uint8_t to_u8(FirmwareType value)
-    {
-        return static_cast<std::uint8_t>(value);
-    }
-
-    constexpr std::uint8_t to_u8(CollisionSensitivity value)
     {
         return static_cast<std::uint8_t>(value);
     }
