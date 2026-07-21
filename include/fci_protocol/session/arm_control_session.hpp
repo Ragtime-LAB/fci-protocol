@@ -49,12 +49,26 @@ using ArmControlSession = StreamSession<
     fci::arm::GetDeviceInfoResponsePacket,
     fci::arm::SetDeviceInfoRequestPacket,
     fci::arm::SetDeviceInfoResponsePacket,
+    fci::arm::StartMotionRequestPacket,
+    fci::arm::StartMotionResponsePacket,
+    fci::arm::StopMotionRequestPacket,
+    fci::arm::StopMotionResponsePacket,
+    fci::arm::SetJointImpedanceRequestPacket,
+    fci::arm::SetJointImpedanceResponsePacket,
+    fci::arm::SetCartesianImpedanceRequestPacket,
+    fci::arm::SetCartesianImpedanceResponsePacket,
+    fci::arm::SetEEFrameRequestPacket,
+    fci::arm::SetEEFrameResponsePacket,
+    fci::arm::SetLoadRequestPacket,
+    fci::arm::SetLoadResponsePacket,
     fci::arm::JointCommandPacket,
     fci::arm::EmergencyStopPacket,
     fci::arm::GripperCommandPacket,
     fci::arm::JointPosVelCommandPacket,
     fci::arm::JointVelocityCommandPacket,
-    fci::arm::JointHybridCommandPacket>;
+    fci::arm::JointHybridCommandPacket,
+    fci::arm::CartesianPoseCommandPacket,
+    fci::arm::CartesianVelocityCommandPacket>;
 
 template <typename TickProvider>
 using ArmControlCallbackSession =

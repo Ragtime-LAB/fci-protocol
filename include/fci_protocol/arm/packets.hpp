@@ -41,6 +41,9 @@ struct ArmStatus {
     JointStatus status;
     float base_gravity[3];
     GripperStatus gripper;
+    float O_T_EE[16];       // end-effector pose (column-major 4x4), omni-float for single-precision
+    float F_ext[6];          // estimated external wrench (Fx,Fy,Fz,Mx,My,Mz)
+    std::uint32_t errors;    // error bitmap
 };
 
 struct MotorFeedback {
@@ -136,6 +139,35 @@ struct GetMotorFeedbackCommand {
     std::uint8_t dummy;
 };
 
+struct StartMotionCommand {
+    std::uint8_t control_mode;     // MotorControlMode enum
+    std::uint8_t motion_gen_mode;  // 0=None, 1=JointPos, 2=JointVel, 3=CartesianPos, 4=CartesianVel
+    std::uint8_t controller_mode;  // 0=JointImpedance, 1=CartesianImpedance (only used when kFirmware)
+    std::uint8_t computation_mode; // 0=kHost, 1=kFirmware
+};
+
+struct StopMotionCommand {
+    std::uint8_t dummy;
+};
+
+struct SetJointImpedanceCommand {
+    float K[6];  // joint stiffness [Nm/rad]
+};
+
+struct SetCartesianImpedanceCommand {
+    float K[6];  // Cartesian stiffness {x,y,z,roll,pitch,yaw} [N/m, Nm/rad]
+};
+
+struct SetEEFrameCommand {
+    float T[16];  // NE_T_EE 4x4 column-major
+};
+
+struct SetLoadCommand {
+    float mass_kg;         // payload mass
+    float F_x_Cload[3];    // centre of mass in flange frame [m]
+    float load_inertia[9]; // inertia matrix column-major [kg*m^2]
+};
+
 // ──────────────────────────────────────────────
 //  Response payloads
 // ──────────────────────────────────────────────
@@ -194,6 +226,30 @@ struct UsbSessionStopResponse {
 
 struct GetMotorFeedbackResponse {
     MotorFeedbackArray motors;
+};
+
+struct StartMotionResponse {
+    StartMotionStatus status;
+};
+
+struct StopMotionResponse {
+    StopMotionStatus status;
+};
+
+struct SetJointImpedanceResponse {
+    SetJointImpedanceStatus status;
+};
+
+struct SetCartesianImpedanceResponse {
+    SetCartesianImpedanceStatus status;
+};
+
+struct SetEEFrameResponse {
+    SetEEFrameStatus status;
+};
+
+struct SetLoadResponse {
+    SetLoadStatus status;
 };
 
 // ──────────────────────────────────────────────
@@ -275,6 +331,36 @@ struct GetMotorFeedbackRequestPacket {
     GetMotorFeedbackCommand payload;
 };
 
+struct StartMotionRequestPacket {
+    TransactionId tx_id;
+    StartMotionCommand payload;
+};
+
+struct StopMotionRequestPacket {
+    TransactionId tx_id;
+    StopMotionCommand payload;
+};
+
+struct SetJointImpedanceRequestPacket {
+    TransactionId tx_id;
+    SetJointImpedanceCommand payload;
+};
+
+struct SetCartesianImpedanceRequestPacket {
+    TransactionId tx_id;
+    SetCartesianImpedanceCommand payload;
+};
+
+struct SetEEFrameRequestPacket {
+    TransactionId tx_id;
+    SetEEFrameCommand payload;
+};
+
+struct SetLoadRequestPacket {
+    TransactionId tx_id;
+    SetLoadCommand payload;
+};
+
 // ──────────────────────────────────────────────
 //  Response packets (firmware → host)
 // ──────────────────────────────────────────────
@@ -354,6 +440,36 @@ struct GetMotorFeedbackResponsePacket {
     GetMotorFeedbackResponse payload;
 };
 
+struct StartMotionResponsePacket {
+    TransactionId tx_id;
+    StartMotionResponse payload;
+};
+
+struct StopMotionResponsePacket {
+    TransactionId tx_id;
+    StopMotionResponse payload;
+};
+
+struct SetJointImpedanceResponsePacket {
+    TransactionId tx_id;
+    SetJointImpedanceResponse payload;
+};
+
+struct SetCartesianImpedanceResponsePacket {
+    TransactionId tx_id;
+    SetCartesianImpedanceResponse payload;
+};
+
+struct SetEEFrameResponsePacket {
+    TransactionId tx_id;
+    SetEEFrameResponse payload;
+};
+
+struct SetLoadResponsePacket {
+    TransactionId tx_id;
+    SetLoadResponse payload;
+};
+
 // ──────────────────────────────────────────────
 //  Real-time control (fire-and-forget, no tx_id)
 // ──────────────────────────────────────────────
@@ -388,6 +504,24 @@ struct JointHybridCommandPacket {
     float current_limit_norm[6];
     std::uint8_t enabled_mask;
     std::uint16_t seq;
+};
+
+struct CartesianPoseCommandPacket {
+    float T[16];            // O_T_EE_desired, column-major 4x4
+    float kp[6];            // per-frame Cartesian stiffness
+    float kd[6];            // per-frame Cartesian damping
+    std::uint32_t dt_us;    // integration step for firmware-side interpolation
+    std::uint16_t seq;      // monotonic sequence number
+    std::uint8_t control_mode; // bit[1:0]=type (0=hold, 1=pos, 2=vel, 3=torque)
+};
+
+struct CartesianVelocityCommandPacket {
+    float v[6];             // O_dP_EE_desired {vx,vy,vz,wx,wy,wz}
+    float kp[6];            // per-frame Cartesian stiffness
+    float kd[6];            // per-frame Cartesian damping
+    std::uint32_t dt_us;    // integration step
+    std::uint16_t seq;      // monotonic sequence number
+    std::uint8_t control_mode;
 };
 
 struct EmergencyStopPacket {
@@ -848,6 +982,152 @@ struct PacketTraits<fci::arm::SetDeviceInfoResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetDeviceInfoResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetDeviceInfoResponse);
     static constexpr std::size_t size = sizeof(fci::arm::SetDeviceInfoResponsePacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+// ── New: StartMotion / StopMotion ──
+
+template <>
+struct PacketTraits<fci::arm::StartMotionRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::StartMotionRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::StartMotionRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::StartMotionRequestPacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
+};
+
+template <>
+struct PacketTraits<fci::arm::StartMotionResponsePacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::StartMotionResponsePacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::StartMotionResponse);
+    static constexpr std::size_t size = sizeof(fci::arm::StartMotionResponsePacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::StopMotionRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::StopMotionRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::StopMotionRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::StopMotionRequestPacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
+};
+
+template <>
+struct PacketTraits<fci::arm::StopMotionResponsePacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::StopMotionResponsePacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::StopMotionResponse);
+    static constexpr std::size_t size = sizeof(fci::arm::StopMotionResponsePacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+// ── New: SetJointImpedance / SetCartesianImpedance / SetEEFrame / SetLoad ──
+
+template <>
+struct PacketTraits<fci::arm::SetJointImpedanceRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::SetJointImpedanceRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetJointImpedanceRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::SetJointImpedanceRequestPacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
+};
+
+template <>
+struct PacketTraits<fci::arm::SetJointImpedanceResponsePacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::SetJointImpedanceResponsePacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetJointImpedanceResponse);
+    static constexpr std::size_t size = sizeof(fci::arm::SetJointImpedanceResponsePacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::SetCartesianImpedanceRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::SetCartesianImpedanceRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetCartesianImpedanceRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::SetCartesianImpedanceRequestPacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
+};
+
+template <>
+struct PacketTraits<fci::arm::SetCartesianImpedanceResponsePacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::SetCartesianImpedanceResponsePacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetCartesianImpedanceResponse);
+    static constexpr std::size_t size = sizeof(fci::arm::SetCartesianImpedanceResponsePacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::SetEEFrameRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::SetEEFrameRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetEEFrameRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::SetEEFrameRequestPacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
+};
+
+template <>
+struct PacketTraits<fci::arm::SetEEFrameResponsePacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::SetEEFrameResponsePacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetEEFrameResponse);
+    static constexpr std::size_t size = sizeof(fci::arm::SetEEFrameResponsePacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::SetLoadRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::SetLoadRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetLoadRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::SetLoadRequestPacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
+};
+
+template <>
+struct PacketTraits<fci::arm::SetLoadResponsePacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::SetLoadResponsePacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetLoadResponse);
+    static constexpr std::size_t size = sizeof(fci::arm::SetLoadResponsePacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+// ── New: CartesianPoseCommand / CartesianVelocityCommand ──
+
+template <>
+struct PacketTraits<fci::arm::CartesianPoseCommandPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::CartesianPoseCommandPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::CartesianPoseCommand);
+    static constexpr std::size_t size = sizeof(fci::arm::CartesianPoseCommandPacket);
+    static constexpr bool skip_memory_pool = true;
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::CartesianVelocityCommandPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::CartesianVelocityCommandPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::CartesianVelocityCommand);
+    static constexpr std::size_t size = sizeof(fci::arm::CartesianVelocityCommandPacket);
     static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;

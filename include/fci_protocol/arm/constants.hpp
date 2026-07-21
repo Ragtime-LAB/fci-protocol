@@ -54,8 +54,20 @@ namespace fci::arm
         GetDeviceInfoResponse = 0x6216,
         SetDeviceInfoRequest = 0x6217,
         SetDeviceInfoResponse = 0x6218,
-        SetMotorControlModeRequest = 0x6215,
-        SetMotorControlModeResponse = 0x6216,
+        SetMotorControlModeRequest = 0x6219,
+        SetMotorControlModeResponse = 0x621A,
+        SetJointImpedanceRequest = 0x621B,
+        SetJointImpedanceResponse = 0x621C,
+        SetCartesianImpedanceRequest = 0x621D,
+        SetCartesianImpedanceResponse = 0x621E,
+        SetEEFrameRequest = 0x621F,
+        SetEEFrameResponse = 0x6220,
+        SetLoadRequest = 0x6221,
+        SetLoadResponse = 0x6222,
+        StartMotionRequest = 0x6223,
+        StartMotionResponse = 0x6224,
+        StopMotionRequest = 0x6225,
+        StopMotionResponse = 0x6226,
 
         // ── Real-time control (fire-and-forget, notification) ──
         JointCommand = 0x6301,
@@ -64,6 +76,8 @@ namespace fci::arm
         JointPosVelCommand = 0x6306,
         JointVelocityCommand = 0x6307,
         JointHybridCommand = 0x6308,
+        CartesianPoseCommand = 0x6309,
+        CartesianVelocityCommand = 0x630A,
     };
 
     // ── Overall arm FSM ──
@@ -152,6 +166,13 @@ namespace fci::arm
         Ok = 0,
     };
 
+    enum class FirmwareType : std::uint8_t
+    {
+        StandardArm = 0,
+        MobileArm = 1,
+        CobotArm = 2,
+    };
+
     enum class CollisionSensitivity : std::uint8_t
     {
         Low = 0,
@@ -185,6 +206,43 @@ namespace fci::arm
         Ok = 0,
     };
 
+    enum class StartMotionStatus : std::uint8_t
+    {
+        Ok = 0,
+        Busy = 1,
+        InvalidMode = 2,
+        NotIdle = 3,
+    };
+
+    enum class StopMotionStatus : std::uint8_t
+    {
+        Ok = 0,
+    };
+
+    enum class SetJointImpedanceStatus : std::uint8_t
+    {
+        Ok = 0,
+        StorageFailed = 1,
+    };
+
+    enum class SetCartesianImpedanceStatus : std::uint8_t
+    {
+        Ok = 0,
+        StorageFailed = 1,
+    };
+
+    enum class SetEEFrameStatus : std::uint8_t
+    {
+        Ok = 0,
+        StorageFailed = 1,
+    };
+
+    enum class SetLoadStatus : std::uint8_t
+    {
+        Ok = 0,
+        StorageFailed = 1,
+    };
+
     constexpr std::uint16_t to_u16(Command value)
     {
         return static_cast<std::uint16_t>(value);
@@ -206,6 +264,11 @@ namespace fci::arm
     }
 
     constexpr std::uint8_t to_u8(CalibrationType value)
+    {
+        return static_cast<std::uint8_t>(value);
+    }
+
+    constexpr std::uint8_t to_u8(FirmwareType value)
     {
         return static_cast<std::uint8_t>(value);
     }
