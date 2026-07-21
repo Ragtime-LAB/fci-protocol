@@ -62,7 +62,7 @@ struct MotorFeedbackArray {
 // ──────────────────────────────────────────────
 
 struct AckPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     std::uint16_t cmd_id;
     std::uint8_t status;
 };
@@ -227,92 +227,92 @@ struct SetLoadResponse {
 // ──────────────────────────────────────────────
 
 struct SetMotorStateRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetMotorStateCommand payload;
 };
 
 struct SetMotorControlModeRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetMotorControlModeCommand payload;
 };
 
 struct SetZeroRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetZeroCommand payload;
 };
 
 struct ClearErrorRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     ClearErrorCommand payload;
 };
 
 struct HomeAllRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     HomeAllCommand payload;
 };
 
 struct ClearFaultsRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     ClearFaultsCommand payload;
 };
 
 struct SdkClientConnectedRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SdkClientConnectedCommand payload;
 };
 
 struct SdkClientDisconnectedRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SdkClientDisconnectedCommand payload;
 };
 
 struct HomeDoneRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     HomeDoneCommand payload;
 };
 
 struct UsbSessionStartRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     UsbSessionStartCommand payload;
 };
 
 struct UsbSessionStopRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     UsbSessionStopCommand payload;
 };
 
 struct GetMotorFeedbackRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     GetMotorFeedbackCommand payload;
 };
 
 struct StartMotionRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     StartMotionCommand payload;
 };
 
 struct StopMotionRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     StopMotionCommand payload;
 };
 
 struct SetJointImpedanceRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetJointImpedanceCommand payload;
 };
 
 struct SetCartesianImpedanceRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetCartesianImpedanceCommand payload;
 };
 
 struct SetEEFrameRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetEEFrameCommand payload;
 };
 
 struct SetLoadRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetLoadCommand payload;
 };
 
@@ -321,92 +321,92 @@ struct SetLoadRequestPacket {
 // ──────────────────────────────────────────────
 
 struct SetMotorStateResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetMotorStateResponse payload;
 };
 
 struct SetMotorControlModeResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetMotorControlModeResponse payload;
 };
 
 struct SetZeroResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetZeroResponse payload;
 };
 
 struct ClearErrorResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     ClearErrorResponse payload;
 };
 
 struct HomeAllResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     HomeAllResponse payload;
 };
 
 struct ClearFaultsResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     ClearFaultsResponse payload;
 };
 
 struct SdkClientConnectedResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SdkClientNotifyResponse payload;
 };
 
 struct SdkClientDisconnectedResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SdkClientNotifyResponse payload;
 };
 
 struct HomeDoneResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     HomeDoneResponse payload;
 };
 
 struct UsbSessionStartResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     UsbSessionStartResponse payload;
 };
 
 struct UsbSessionStopResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     UsbSessionStopResponse payload;
 };
 
 struct GetMotorFeedbackResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     GetMotorFeedbackResponse payload;
 };
 
 struct StartMotionResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     StartMotionResponse payload;
 };
 
 struct StopMotionResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     StopMotionResponse payload;
 };
 
 struct SetJointImpedanceResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetJointImpedanceResponse payload;
 };
 
 struct SetCartesianImpedanceResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetCartesianImpedanceResponse payload;
 };
 
 struct SetEEFrameResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetEEFrameResponse payload;
 };
 
 struct SetLoadResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetLoadResponse payload;
 };
 
@@ -492,7 +492,6 @@ struct PacketTraits<fci::arm::ArmStatus>
     : PacketTraitsBase<PacketTraits<fci::arm::ArmStatus>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ArmStatus);
     static constexpr std::size_t size = sizeof(fci::arm::ArmStatus);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -502,7 +501,6 @@ struct PacketTraits<fci::arm::MotorFeedbackArray>
     : PacketTraitsBase<PacketTraits<fci::arm::MotorFeedbackArray>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::MotorFeedbackArray);
     static constexpr std::size_t size = sizeof(fci::arm::MotorFeedbackArray);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -512,7 +510,6 @@ struct PacketTraits<fci::arm::GripperStatus>
     : PacketTraitsBase<PacketTraits<fci::arm::GripperStatus>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GripperStatus);
     static constexpr std::size_t size = sizeof(fci::arm::GripperStatus);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -522,7 +519,6 @@ struct PacketTraits<fci::arm::AckPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::AckPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::Ack);
     static constexpr std::size_t size = sizeof(fci::arm::AckPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Ack;
 };
@@ -532,7 +528,6 @@ struct PacketTraits<fci::arm::SetMotorStateRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetMotorStateRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetMotorStateRequest);
     static constexpr std::size_t size = sizeof(fci::arm::SetMotorStateRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -542,7 +537,6 @@ struct PacketTraits<fci::arm::SetMotorStateResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetMotorStateResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetMotorStateResponse);
     static constexpr std::size_t size = sizeof(fci::arm::SetMotorStateResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -552,7 +546,6 @@ struct PacketTraits<fci::arm::SetMotorControlModeRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetMotorControlModeRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetMotorControlModeRequest);
     static constexpr std::size_t size = sizeof(fci::arm::SetMotorControlModeRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -562,7 +555,6 @@ struct PacketTraits<fci::arm::SetMotorControlModeResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetMotorControlModeResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetMotorControlModeResponse);
     static constexpr std::size_t size = sizeof(fci::arm::SetMotorControlModeResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -572,7 +564,6 @@ struct PacketTraits<fci::arm::SetZeroRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetZeroRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetZeroRequest);
     static constexpr std::size_t size = sizeof(fci::arm::SetZeroRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -582,7 +573,6 @@ struct PacketTraits<fci::arm::SetZeroResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetZeroResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetZeroResponse);
     static constexpr std::size_t size = sizeof(fci::arm::SetZeroResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -592,7 +582,6 @@ struct PacketTraits<fci::arm::ClearErrorRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::ClearErrorRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ClearErrorRequest);
     static constexpr std::size_t size = sizeof(fci::arm::ClearErrorRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -602,7 +591,6 @@ struct PacketTraits<fci::arm::ClearErrorResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::ClearErrorResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ClearErrorResponse);
     static constexpr std::size_t size = sizeof(fci::arm::ClearErrorResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -612,7 +600,6 @@ struct PacketTraits<fci::arm::HomeAllRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::HomeAllRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::HomeAllRequest);
     static constexpr std::size_t size = sizeof(fci::arm::HomeAllRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -622,7 +609,6 @@ struct PacketTraits<fci::arm::HomeAllResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::HomeAllResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::HomeAllResponse);
     static constexpr std::size_t size = sizeof(fci::arm::HomeAllResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -632,7 +618,6 @@ struct PacketTraits<fci::arm::ClearFaultsRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::ClearFaultsRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ClearFaultsRequest);
     static constexpr std::size_t size = sizeof(fci::arm::ClearFaultsRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -642,7 +627,6 @@ struct PacketTraits<fci::arm::ClearFaultsResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::ClearFaultsResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ClearFaultsResponse);
     static constexpr std::size_t size = sizeof(fci::arm::ClearFaultsResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -652,7 +636,6 @@ struct PacketTraits<fci::arm::SdkClientConnectedRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SdkClientConnectedRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SdkClientConnectedRequest);
     static constexpr std::size_t size = sizeof(fci::arm::SdkClientConnectedRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -662,7 +645,6 @@ struct PacketTraits<fci::arm::SdkClientConnectedResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SdkClientConnectedResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SdkClientConnectedResponse);
     static constexpr std::size_t size = sizeof(fci::arm::SdkClientConnectedResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -672,7 +654,6 @@ struct PacketTraits<fci::arm::SdkClientDisconnectedRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SdkClientDisconnectedRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SdkClientDisconnectedRequest);
     static constexpr std::size_t size = sizeof(fci::arm::SdkClientDisconnectedRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -682,7 +663,6 @@ struct PacketTraits<fci::arm::SdkClientDisconnectedResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SdkClientDisconnectedResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SdkClientDisconnectedResponse);
     static constexpr std::size_t size = sizeof(fci::arm::SdkClientDisconnectedResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -692,7 +672,6 @@ struct PacketTraits<fci::arm::HomeDoneRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::HomeDoneRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::HomeDoneRequest);
     static constexpr std::size_t size = sizeof(fci::arm::HomeDoneRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -702,7 +681,6 @@ struct PacketTraits<fci::arm::HomeDoneResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::HomeDoneResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::HomeDoneResponse);
     static constexpr std::size_t size = sizeof(fci::arm::HomeDoneResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -712,7 +690,6 @@ struct PacketTraits<fci::arm::UsbSessionStartRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::UsbSessionStartRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::UsbSessionStartRequest);
     static constexpr std::size_t size = sizeof(fci::arm::UsbSessionStartRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -722,7 +699,6 @@ struct PacketTraits<fci::arm::UsbSessionStartResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::UsbSessionStartResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::UsbSessionStartResponse);
     static constexpr std::size_t size = sizeof(fci::arm::UsbSessionStartResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -732,7 +708,6 @@ struct PacketTraits<fci::arm::UsbSessionStopRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::UsbSessionStopRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::UsbSessionStopRequest);
     static constexpr std::size_t size = sizeof(fci::arm::UsbSessionStopRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -742,7 +717,6 @@ struct PacketTraits<fci::arm::UsbSessionStopResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::UsbSessionStopResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::UsbSessionStopResponse);
     static constexpr std::size_t size = sizeof(fci::arm::UsbSessionStopResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -752,7 +726,6 @@ struct PacketTraits<fci::arm::GetMotorFeedbackRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::GetMotorFeedbackRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GetMotorFeedbackRequest);
     static constexpr std::size_t size = sizeof(fci::arm::GetMotorFeedbackRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -762,7 +735,6 @@ struct PacketTraits<fci::arm::GetMotorFeedbackResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::GetMotorFeedbackResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GetMotorFeedbackResponse);
     static constexpr std::size_t size = sizeof(fci::arm::GetMotorFeedbackResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -772,7 +744,6 @@ struct PacketTraits<fci::arm::JointMITCommandPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::JointMITCommandPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::JointMITCommand);
     static constexpr std::size_t size = sizeof(fci::arm::JointMITCommandPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -782,7 +753,6 @@ struct PacketTraits<fci::arm::EmergencyStopPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::EmergencyStopPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::EmergencyStop);
     static constexpr std::size_t size = sizeof(fci::arm::EmergencyStopPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -792,7 +762,6 @@ struct PacketTraits<fci::arm::GripperCommandPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::GripperCommandPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GripperCommand);
     static constexpr std::size_t size = sizeof(fci::arm::GripperCommandPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -802,7 +771,6 @@ struct PacketTraits<fci::arm::JointPosVelCommandPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::JointPosVelCommandPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::JointPosVelCommand);
     static constexpr std::size_t size = sizeof(fci::arm::JointPosVelCommandPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -812,7 +780,6 @@ struct PacketTraits<fci::arm::JointVelCommandPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::JointVelCommandPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::JointVelCommand);
     static constexpr std::size_t size = sizeof(fci::arm::JointVelCommandPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -822,7 +789,6 @@ struct PacketTraits<fci::arm::JointPVTCommandPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::JointPVTCommandPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::JointPVTCommand);
     static constexpr std::size_t size = sizeof(fci::arm::JointPVTCommandPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -832,7 +798,6 @@ struct PacketTraits<fci::arm::GetDeviceInfoRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::GetDeviceInfoRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GetDeviceInfoRequest);
     static constexpr std::size_t size = sizeof(fci::arm::GetDeviceInfoRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -842,7 +807,6 @@ struct PacketTraits<fci::arm::GetDeviceInfoResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::GetDeviceInfoResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GetDeviceInfoResponse);
     static constexpr std::size_t size = sizeof(fci::arm::GetDeviceInfoResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -852,7 +816,6 @@ struct PacketTraits<fci::arm::SetDeviceInfoRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetDeviceInfoRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetDeviceInfoRequest);
     static constexpr std::size_t size = sizeof(fci::arm::SetDeviceInfoRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -862,7 +825,6 @@ struct PacketTraits<fci::arm::SetDeviceInfoResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetDeviceInfoResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetDeviceInfoResponse);
     static constexpr std::size_t size = sizeof(fci::arm::SetDeviceInfoResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -874,7 +836,6 @@ struct PacketTraits<fci::arm::StartMotionRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::StartMotionRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::StartMotionRequest);
     static constexpr std::size_t size = sizeof(fci::arm::StartMotionRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -884,7 +845,6 @@ struct PacketTraits<fci::arm::StartMotionResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::StartMotionResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::StartMotionResponse);
     static constexpr std::size_t size = sizeof(fci::arm::StartMotionResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -894,7 +854,6 @@ struct PacketTraits<fci::arm::StopMotionRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::StopMotionRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::StopMotionRequest);
     static constexpr std::size_t size = sizeof(fci::arm::StopMotionRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -904,7 +863,6 @@ struct PacketTraits<fci::arm::StopMotionResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::StopMotionResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::StopMotionResponse);
     static constexpr std::size_t size = sizeof(fci::arm::StopMotionResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -916,7 +874,6 @@ struct PacketTraits<fci::arm::SetJointImpedanceRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetJointImpedanceRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetJointImpedanceRequest);
     static constexpr std::size_t size = sizeof(fci::arm::SetJointImpedanceRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -926,7 +883,6 @@ struct PacketTraits<fci::arm::SetJointImpedanceResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetJointImpedanceResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetJointImpedanceResponse);
     static constexpr std::size_t size = sizeof(fci::arm::SetJointImpedanceResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -936,7 +892,6 @@ struct PacketTraits<fci::arm::SetCartesianImpedanceRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetCartesianImpedanceRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetCartesianImpedanceRequest);
     static constexpr std::size_t size = sizeof(fci::arm::SetCartesianImpedanceRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -946,7 +901,6 @@ struct PacketTraits<fci::arm::SetCartesianImpedanceResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetCartesianImpedanceResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetCartesianImpedanceResponse);
     static constexpr std::size_t size = sizeof(fci::arm::SetCartesianImpedanceResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -956,7 +910,6 @@ struct PacketTraits<fci::arm::SetEEFrameRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetEEFrameRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetEEFrameRequest);
     static constexpr std::size_t size = sizeof(fci::arm::SetEEFrameRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -966,7 +919,6 @@ struct PacketTraits<fci::arm::SetEEFrameResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetEEFrameResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetEEFrameResponse);
     static constexpr std::size_t size = sizeof(fci::arm::SetEEFrameResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -976,7 +928,6 @@ struct PacketTraits<fci::arm::SetLoadRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetLoadRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetLoadRequest);
     static constexpr std::size_t size = sizeof(fci::arm::SetLoadRequestPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
@@ -986,7 +937,6 @@ struct PacketTraits<fci::arm::SetLoadResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetLoadResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetLoadResponse);
     static constexpr std::size_t size = sizeof(fci::arm::SetLoadResponsePacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -998,7 +948,6 @@ struct PacketTraits<fci::arm::CartesianPoseCommandPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::CartesianPoseCommandPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::CartesianPoseCommand);
     static constexpr std::size_t size = sizeof(fci::arm::CartesianPoseCommandPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
@@ -1008,7 +957,6 @@ struct PacketTraits<fci::arm::CartesianVelocityCommandPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::CartesianVelocityCommandPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::CartesianVelocityCommand);
     static constexpr std::size_t size = sizeof(fci::arm::CartesianVelocityCommandPacket);
-    static constexpr bool skip_memory_pool = true;
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };

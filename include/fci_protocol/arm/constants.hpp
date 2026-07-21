@@ -7,7 +7,7 @@
 
 namespace fci::arm
 {
-    using TransactionId = std::uint32_t;
+    using ReqId = std::uint8_t;
 
     inline constexpr fci::Semver kProtocolVersion = fci::MakeSemver(0, 0, 1);
 

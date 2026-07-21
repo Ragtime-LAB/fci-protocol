@@ -41,12 +41,12 @@ struct GetDeviceInfoResponse {
 // ──────────────────────────────────────────────
 
 struct GetDeviceInfoRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     GetDeviceInfoCommand payload;
 };
 
 struct GetDeviceInfoResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     GetDeviceInfoResponse payload;
 };
 
@@ -67,12 +67,12 @@ struct SetDeviceInfoResponse {
 };
 
 struct SetDeviceInfoRequestPacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetDeviceInfoCommand payload;
 };
 
 struct SetDeviceInfoResponsePacket {
-    TransactionId tx_id;
+    ReqId req_id;
     SetDeviceInfoResponse payload;
 };
 

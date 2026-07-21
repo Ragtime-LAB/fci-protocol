@@ -45,12 +45,24 @@ public:
   bool has_send() const { return has_send_; }
 
   tl::expected<void, Error> receive(const uint8_t *buf, size_t len) {
-    if (len >= 5) {
-      uint8_t cmd = buf[3];
-      if (cmd == Meta::PacketTraits<USBAck>::cmd && len >= 6) {
-        uint8_t req_id = buf[4];
-        uint8_t status = buf[5];
-        ack_mgr_.resolve(req_id, status);
+    // USBAck fast-path: resolve ack before parser processes the frame.
+    // Uses the protocol header layout from PacketTraits<USBAck>.
+    constexpr auto s_cmd = Meta::PacketTraits<USBAck>::cmd;
+    using Proto = typename Meta::PacketTraits<USBAck>::Protocol;
+    constexpr size_t s_min_len = Proto::header_size + sizeof(USBAck);
+
+    if (len >= s_min_len) {
+      std::uint16_t s_wire_cmd = 0;
+      if constexpr (Proto::cmd_field_bytes == 2) {
+        s_wire_cmd = static_cast<std::uint16_t>(buf[Proto::cmd_offset]) |
+                     (static_cast<std::uint16_t>(buf[Proto::cmd_offset + 1]) << 8);
+      } else {
+        s_wire_cmd = buf[Proto::cmd_offset];
+      }
+      if (s_wire_cmd == s_cmd) {
+        std::uint8_t s_req_id = buf[Proto::header_size];
+        std::uint8_t s_status = buf[Proto::header_size + 1];
+        ack_mgr_.resolve(s_req_id, s_status);
       }
     }
     return parser_.push_data(buf, len);
