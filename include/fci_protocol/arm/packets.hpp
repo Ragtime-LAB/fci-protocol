@@ -109,14 +109,6 @@ struct HomeDoneCommand {
     std::uint8_t dummy;
 };
 
-struct UsbSessionStartCommand {
-    std::uint8_t dummy;
-};
-
-struct UsbSessionStopCommand {
-    std::uint8_t dummy;
-};
-
 struct GetMotorFeedbackCommand {
     std::uint8_t dummy;
 };
@@ -184,14 +176,6 @@ struct SdkClientNotifyResponse {
 
 struct HomeDoneResponse {
     HomeDoneStatus status;
-};
-
-struct UsbSessionStartResponse {
-    UsbSessionStartStatus status;
-};
-
-struct UsbSessionStopResponse {
-    UsbSessionStopStatus status;
 };
 
 struct GetMotorFeedbackResponse {
@@ -269,16 +253,6 @@ struct SdkClientDisconnectedRequestPacket {
 struct HomeDoneRequestPacket {
     ReqId req_id;
     HomeDoneCommand payload;
-};
-
-struct UsbSessionStartRequestPacket {
-    ReqId req_id;
-    UsbSessionStartCommand payload;
-};
-
-struct UsbSessionStopRequestPacket {
-    ReqId req_id;
-    UsbSessionStopCommand payload;
 };
 
 struct GetMotorFeedbackRequestPacket {
@@ -363,16 +337,6 @@ struct SdkClientDisconnectedResponsePacket {
 struct HomeDoneResponsePacket {
     ReqId req_id;
     HomeDoneResponse payload;
-};
-
-struct UsbSessionStartResponsePacket {
-    ReqId req_id;
-    UsbSessionStartResponse payload;
-};
-
-struct UsbSessionStopResponsePacket {
-    ReqId req_id;
-    UsbSessionStopResponse payload;
 };
 
 struct GetMotorFeedbackResponsePacket {
@@ -681,42 +645,6 @@ struct PacketTraits<fci::arm::HomeDoneResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::HomeDoneResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::HomeDoneResponse);
     static constexpr std::size_t size = sizeof(fci::arm::HomeDoneResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
-};
-
-template <>
-struct PacketTraits<fci::arm::UsbSessionStartRequestPacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::UsbSessionStartRequestPacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::UsbSessionStartRequest);
-    static constexpr std::size_t size = sizeof(fci::arm::UsbSessionStartRequestPacket);
-    using Protocol = USBRequestProto;
-    static constexpr PacketCategory category = PacketCategory::Request;
-};
-
-template <>
-struct PacketTraits<fci::arm::UsbSessionStartResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::UsbSessionStartResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::UsbSessionStartResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::UsbSessionStartResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
-};
-
-template <>
-struct PacketTraits<fci::arm::UsbSessionStopRequestPacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::UsbSessionStopRequestPacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::UsbSessionStopRequest);
-    static constexpr std::size_t size = sizeof(fci::arm::UsbSessionStopRequestPacket);
-    using Protocol = USBRequestProto;
-    static constexpr PacketCategory category = PacketCategory::Request;
-};
-
-template <>
-struct PacketTraits<fci::arm::UsbSessionStopResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::UsbSessionStopResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::UsbSessionStopResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::UsbSessionStopResponsePacket);
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };

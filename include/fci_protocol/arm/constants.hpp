@@ -38,10 +38,6 @@ namespace fci::arm
         SdkClientDisconnectedResponse = 0x620C,
         HomeDoneRequest = 0x620D,
         HomeDoneResponse = 0x620E,
-        UsbSessionStartRequest = 0x620F,
-        UsbSessionStartResponse = 0x6210,
-        UsbSessionStopRequest = 0x6211,
-        UsbSessionStopResponse = 0x6212,
         GetMotorFeedbackRequest = 0x6213,
         GetMotorFeedbackResponse = 0x6214,
         GetDeviceInfoRequest = 0x6215,
@@ -153,16 +149,6 @@ namespace fci::arm
     };
 
     enum class HomeDoneStatus : std::uint8_t
-    {
-        Ok = 0,
-    };
-
-    enum class UsbSessionStartStatus : std::uint8_t
-    {
-        Ok = 0,
-    };
-
-    enum class UsbSessionStopStatus : std::uint8_t
     {
         Ok = 0,
     };
