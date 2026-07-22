@@ -41,6 +41,7 @@ struct ArmStatus {
     float O_T_EE[16];       // end-effector pose (column-major 4x4), omni-float for single-precision
     float F_ext[6];          // estimated external wrench (Fx,Fy,Fz,Mx,My,Mz)
     std::uint32_t errors;    // error bitmap
+    std::uint64_t last_sdk_timestamp_us; // echo: most recent control packet's sdk timestamp
 };
 
 struct MotorFeedback {
@@ -355,7 +356,8 @@ struct JointMITCommandPacket {
     float kd[6];
     std::uint32_t dt_us;
     std::uint16_t seq;
-    std::uint8_t control_mode; // bit[1:0]=type(0=hold,1=MIT,3=torque), bit[2]=gravity_enable
+    std::uint8_t control_mode;
+    std::uint64_t sdk_timestamp_us; // host monotonic timestamp when packet was sent
 };
 
 struct JointPosVelCommandPacket {
@@ -363,12 +365,14 @@ struct JointPosVelCommandPacket {
     float dq[6];
     std::uint8_t enabled_mask;
     std::uint16_t seq;
+    std::uint64_t sdk_timestamp_us;
 };
 
 struct JointVelCommandPacket {
     float dq[6];
     std::uint8_t enabled_mask;
     std::uint16_t seq;
+    std::uint64_t sdk_timestamp_us;
 };
 
 struct JointPVTCommandPacket {
@@ -377,24 +381,27 @@ struct JointPVTCommandPacket {
     float current_limit_norm[6];
     std::uint8_t enabled_mask;
     std::uint16_t seq;
+    std::uint64_t sdk_timestamp_us;
 };
 
 struct CartesianPoseCommandPacket {
-    float T[16];            // O_T_EE_desired, column-major 4x4
-    float kp[6];            // per-frame Cartesian stiffness
-    float kd[6];            // per-frame Cartesian damping
-    std::uint32_t dt_us;    // integration step for firmware-side interpolation
-    std::uint16_t seq;      // monotonic sequence number
-    std::uint8_t control_mode; // bit[1:0]=type (0=hold, 1=pos, 2=vel, 3=torque)
+    float T[16];
+    float kp[6];
+    float kd[6];
+    std::uint32_t dt_us;
+    std::uint16_t seq;
+    std::uint8_t control_mode;
+    std::uint64_t sdk_timestamp_us;
 };
 
 struct CartesianVelocityCommandPacket {
-    float v[6];             // O_dP_EE_desired {vx,vy,vz,wx,wy,wz}
-    float kp[6];            // per-frame Cartesian stiffness
-    float kd[6];            // per-frame Cartesian damping
-    std::uint32_t dt_us;    // integration step
-    std::uint16_t seq;      // monotonic sequence number
+    float v[6];
+    float kp[6];
+    float kd[6];
+    std::uint32_t dt_us;
+    std::uint16_t seq;
     std::uint8_t control_mode;
+    std::uint64_t sdk_timestamp_us;
 };
 
 struct EmergencyStopPacket {
