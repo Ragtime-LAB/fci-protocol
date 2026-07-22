@@ -113,17 +113,6 @@ struct GetMotorFeedbackCommand {
     std::uint8_t dummy;
 };
 
-struct StartMotionCommand {
-    std::uint8_t control_mode;     // MotorControlMode enum
-    std::uint8_t motion_gen_mode;  // 0=None, 1=JointPos, 2=JointVel, 3=CartesianPos, 4=CartesianVel
-    std::uint8_t controller_mode;  // 0=JointImpedance, 1=CartesianImpedance (only used when kFirmware)
-    std::uint8_t computation_mode; // 0=kHost, 1=kFirmware
-};
-
-struct StopMotionCommand {
-    std::uint8_t dummy;
-};
-
 struct SetJointImpedanceCommand {
     float K[6];  // joint stiffness [Nm/rad]
 };
@@ -180,14 +169,6 @@ struct HomeDoneResponse {
 
 struct GetMotorFeedbackResponse {
     MotorFeedbackArray motors;
-};
-
-struct StartMotionResponse {
-    StartMotionStatus status;
-};
-
-struct StopMotionResponse {
-    StopMotionStatus status;
 };
 
 struct SetJointImpedanceResponse {
@@ -258,16 +239,6 @@ struct HomeDoneRequestPacket {
 struct GetMotorFeedbackRequestPacket {
     ReqId req_id;
     GetMotorFeedbackCommand payload;
-};
-
-struct StartMotionRequestPacket {
-    ReqId req_id;
-    StartMotionCommand payload;
-};
-
-struct StopMotionRequestPacket {
-    ReqId req_id;
-    StopMotionCommand payload;
 };
 
 struct SetJointImpedanceRequestPacket {
@@ -342,16 +313,6 @@ struct HomeDoneResponsePacket {
 struct GetMotorFeedbackResponsePacket {
     ReqId req_id;
     GetMotorFeedbackResponse payload;
-};
-
-struct StartMotionResponsePacket {
-    ReqId req_id;
-    StartMotionResponse payload;
-};
-
-struct StopMotionResponsePacket {
-    ReqId req_id;
-    StopMotionResponse payload;
 };
 
 struct SetJointImpedanceResponsePacket {
@@ -753,44 +714,6 @@ struct PacketTraits<fci::arm::SetDeviceInfoResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetDeviceInfoResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetDeviceInfoResponse);
     static constexpr std::size_t size = sizeof(fci::arm::SetDeviceInfoResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
-};
-
-// ── New: StartMotion / StopMotion ──
-
-template <>
-struct PacketTraits<fci::arm::StartMotionRequestPacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::StartMotionRequestPacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::StartMotionRequest);
-    static constexpr std::size_t size = sizeof(fci::arm::StartMotionRequestPacket);
-    using Protocol = USBRequestProto;
-    static constexpr PacketCategory category = PacketCategory::Request;
-};
-
-template <>
-struct PacketTraits<fci::arm::StartMotionResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::StartMotionResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::StartMotionResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::StartMotionResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
-};
-
-template <>
-struct PacketTraits<fci::arm::StopMotionRequestPacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::StopMotionRequestPacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::StopMotionRequest);
-    static constexpr std::size_t size = sizeof(fci::arm::StopMotionRequestPacket);
-    using Protocol = USBRequestProto;
-    static constexpr PacketCategory category = PacketCategory::Request;
-};
-
-template <>
-struct PacketTraits<fci::arm::StopMotionResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::StopMotionResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::StopMotionResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::StopMotionResponsePacket);
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };

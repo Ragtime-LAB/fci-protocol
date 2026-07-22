@@ -54,10 +54,6 @@ namespace fci::arm
         SetEEFrameResponse = 0x6220,
         SetLoadRequest = 0x6221,
         SetLoadResponse = 0x6222,
-        StartMotionRequest = 0x6223,
-        StartMotionResponse = 0x6224,
-        StopMotionRequest = 0x6225,
-        StopMotionResponse = 0x6226,
 
         // ── Real-time control (fire-and-forget, notification) ──
         JointMITCommand = 0x6301,
@@ -149,19 +145,6 @@ namespace fci::arm
     };
 
     enum class HomeDoneStatus : std::uint8_t
-    {
-        Ok = 0,
-    };
-
-    enum class StartMotionStatus : std::uint8_t
-    {
-        Ok = 0,
-        Busy = 1,
-        InvalidMode = 2,
-        NotIdle = 3,
-    };
-
-    enum class StopMotionStatus : std::uint8_t
     {
         Ok = 0,
     };
