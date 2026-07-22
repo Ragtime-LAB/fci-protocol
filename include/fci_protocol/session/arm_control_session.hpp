@@ -26,7 +26,6 @@ using ArmControlSession = StreamSession<
     fci::arm::ClearErrorRequestPacket,
     fci::arm::ClearErrorResponsePacket,
     fci::arm::HomeAllRequestPacket,
-    fci::arm::HomeAllResponsePacket,
     fci::arm::ClearFaultsRequestPacket,
     fci::arm::ClearFaultsResponsePacket,
     fci::arm::SdkClientConnectedRequestPacket,

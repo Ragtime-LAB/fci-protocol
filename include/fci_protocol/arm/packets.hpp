@@ -158,10 +158,6 @@ struct ClearErrorResponse {
     ClearErrorStatus status;
 };
 
-struct HomeAllResponse {
-    HomeAllStatus status;
-};
-
 struct ClearFaultsResponse {
     ClearFaultsStatus status;
 };
@@ -300,11 +296,6 @@ struct SetZeroResponsePacket {
 struct ClearErrorResponsePacket {
     ReqId req_id;
     ClearErrorResponse payload;
-};
-
-struct HomeAllResponsePacket {
-    ReqId req_id;
-    HomeAllResponse payload;
 };
 
 struct ClearFaultsResponsePacket {
@@ -562,15 +553,6 @@ struct PacketTraits<fci::arm::HomeAllRequestPacket>
     static constexpr std::size_t size = sizeof(fci::arm::HomeAllRequestPacket);
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
-};
-
-template <>
-struct PacketTraits<fci::arm::HomeAllResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::HomeAllResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::HomeAllResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::HomeAllResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
 };
 
 template <>
