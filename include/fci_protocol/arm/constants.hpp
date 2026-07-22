@@ -44,16 +44,18 @@ namespace fci::arm
         GetDeviceInfoResponse = 0x6216,
         SetDeviceInfoRequest = 0x6217,
         SetDeviceInfoResponse = 0x6218,
-        SetMotorControlModeRequest = 0x6219,
-        SetMotorControlModeResponse = 0x621A,
-        SetJointImpedanceRequest = 0x621B,
-        SetJointImpedanceResponse = 0x621C,
-        SetCartesianImpedanceRequest = 0x621D,
-        SetCartesianImpedanceResponse = 0x621E,
-        SetEEFrameRequest = 0x621F,
-        SetEEFrameResponse = 0x6220,
-        SetLoadRequest = 0x6221,
-        SetLoadResponse = 0x6222,
+        ArmControlModeRequest = 0x6219,
+        ArmControlModeResponse = 0x621A,
+        GripperControlModeRequest = 0x621B,
+        GripperControlModeResponse = 0x621C,
+        SetJointImpedanceRequest = 0x621D,
+        SetJointImpedanceResponse = 0x621E,
+        SetCartesianImpedanceRequest = 0x621F,
+        SetCartesianImpedanceResponse = 0x6220,
+        SetEEFrameRequest = 0x6221,
+        SetEEFrameResponse = 0x6222,
+        SetLoadRequest = 0x6223,
+        SetLoadResponse = 0x6224,
 
         // ── Real-time control (fire-and-forget, notification) ──
         JointMITCommand = 0x6301,
@@ -98,13 +100,18 @@ namespace fci::arm
         PVT = 4,
     };
 
-    enum class SetMotorControlModeStatus : std::uint8_t
+    enum class ArmControlModeStatus : std::uint8_t
     {
         Ok = 0,
         UnsupportedInCurrentMode = 1,
         InvalidJoint = 2,
         InvalidMode = 3,
         CanTxFailed = 4,
+    };
+
+    enum class GripperControlModeStatus : std::uint8_t
+    {
+        Ok = 0,
     };
 
     enum class SetZeroStatus : std::uint8_t

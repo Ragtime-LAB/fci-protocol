@@ -76,8 +76,11 @@ struct SetMotorStateCommand {
     MotorStateValue state;
 };
 
-struct SetMotorControlModeCommand {
-    std::uint8_t joint_id;
+struct ArmControlModeCommand {
+    MotorControlMode mode;
+};
+
+struct GripperControlModeCommand {
     MotorControlMode mode;
 };
 
@@ -139,8 +142,12 @@ struct SetMotorStateResponse {
     SetMotorStateStatus status;
 };
 
-struct SetMotorControlModeResponse {
-    SetMotorControlModeStatus status;
+struct ArmControlModeResponse {
+    ArmControlModeStatus status;
+};
+
+struct GripperControlModeResponse {
+    GripperControlModeStatus status;
 };
 
 struct SetZeroResponse {
@@ -196,9 +203,14 @@ struct SetMotorStateRequestPacket {
     SetMotorStateCommand payload;
 };
 
-struct SetMotorControlModeRequestPacket {
+struct ArmControlModeRequestPacket {
     ReqId req_id;
-    SetMotorControlModeCommand payload;
+    ArmControlModeCommand payload;
+};
+
+struct GripperControlModeRequestPacket {
+    ReqId req_id;
+    GripperControlModeCommand payload;
 };
 
 struct SetZeroRequestPacket {
@@ -270,9 +282,14 @@ struct SetMotorStateResponsePacket {
     SetMotorStateResponse payload;
 };
 
-struct SetMotorControlModeResponsePacket {
+struct ArmControlModeResponsePacket {
     ReqId req_id;
-    SetMotorControlModeResponse payload;
+    ArmControlModeResponse payload;
+};
+
+struct GripperControlModeResponsePacket {
+    ReqId req_id;
+    GripperControlModeResponse payload;
 };
 
 struct SetZeroResponsePacket {
@@ -467,19 +484,37 @@ struct PacketTraits<fci::arm::SetMotorStateResponsePacket>
 };
 
 template <>
-struct PacketTraits<fci::arm::SetMotorControlModeRequestPacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::SetMotorControlModeRequestPacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetMotorControlModeRequest);
-    static constexpr std::size_t size = sizeof(fci::arm::SetMotorControlModeRequestPacket);
+struct PacketTraits<fci::arm::ArmControlModeRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::ArmControlModeRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ArmControlModeRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::ArmControlModeRequestPacket);
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
 
 template <>
-struct PacketTraits<fci::arm::SetMotorControlModeResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::SetMotorControlModeResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetMotorControlModeResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::SetMotorControlModeResponsePacket);
+struct PacketTraits<fci::arm::ArmControlModeResponsePacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::ArmControlModeResponsePacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ArmControlModeResponse);
+    static constexpr std::size_t size = sizeof(fci::arm::ArmControlModeResponsePacket);
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::GripperControlModeRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::GripperControlModeRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GripperControlModeRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::GripperControlModeRequestPacket);
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
+};
+
+template <>
+struct PacketTraits<fci::arm::GripperControlModeResponsePacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::GripperControlModeResponsePacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GripperControlModeResponse);
+    static constexpr std::size_t size = sizeof(fci::arm::GripperControlModeResponsePacket);
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
