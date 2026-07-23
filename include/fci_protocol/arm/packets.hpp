@@ -306,6 +306,28 @@ struct GripperCommandPacket {
     std::uint32_t dt_us;
     std::uint16_t seq;
     std::uint8_t control_mode;
+    std::uint64_t sdk_timestamp_us;
+};
+
+struct GripperPosVelCommandPacket {
+    float q;
+    float dq;
+    std::uint16_t seq;
+    std::uint64_t sdk_timestamp_us;
+};
+
+struct GripperVelCommandPacket {
+    float dq;
+    std::uint16_t seq;
+    std::uint64_t sdk_timestamp_us;
+};
+
+struct GripperPVTCommandPacket {
+    float q;
+    float dq_limit;
+    float current_limit_norm;
+    std::uint16_t seq;
+    std::uint64_t sdk_timestamp_us;
 };
 
 } // namespace fci::arm
@@ -611,6 +633,33 @@ struct PacketTraits<fci::arm::CartesianVelocityCommandPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::CartesianVelocityCommandPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::CartesianVelocityCommand);
     static constexpr std::size_t size = sizeof(fci::arm::CartesianVelocityCommandPacket);
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::GripperPosVelCommandPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::GripperPosVelCommandPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GripperPosVelCommand);
+    static constexpr std::size_t size = sizeof(fci::arm::GripperPosVelCommandPacket);
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::GripperVelCommandPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::GripperVelCommandPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GripperVelCommand);
+    static constexpr std::size_t size = sizeof(fci::arm::GripperVelCommandPacket);
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::GripperPVTCommandPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::GripperPVTCommandPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GripperPVTCommand);
+    static constexpr std::size_t size = sizeof(fci::arm::GripperPVTCommandPacket);
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };

@@ -54,6 +54,9 @@ namespace fci::arm
         JointPVTCommand = 0x6308,
         CartesianPoseCommand = 0x6309,
         CartesianVelocityCommand = 0x630A,
+        GripperPosVelCommand = 0x6311,
+        GripperVelCommand = 0x6312,
+        GripperPVTCommand = 0x6313,
     };
 
     // ── Overall arm FSM ──

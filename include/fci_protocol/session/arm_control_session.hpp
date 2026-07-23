@@ -43,7 +43,10 @@ using ArmControlSession = StreamSession<
     fci::arm::JointVelCommandPacket,
     fci::arm::JointPVTCommandPacket,
     fci::arm::CartesianPoseCommandPacket,
-    fci::arm::CartesianVelocityCommandPacket>;
+    fci::arm::CartesianVelocityCommandPacket,
+    fci::arm::GripperPosVelCommandPacket,
+    fci::arm::GripperVelCommandPacket,
+    fci::arm::GripperPVTCommandPacket>;
 
 template <typename TickProvider>
 using ArmControlCallbackSession =
