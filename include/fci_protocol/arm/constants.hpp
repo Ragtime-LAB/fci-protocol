@@ -22,8 +22,6 @@ namespace fci::arm
         Ack = 0x6FF0,
 
         // ── Reliable request / response pairs ──
-        SetMotorStateRequest = 0x6105,
-        SetMotorStateResponse = 0x6106,
         SetZeroRequest = 0x6107,
         SetZeroResponse = 0x6108,
         ClearErrorRequest = 0x6109,
@@ -36,8 +34,6 @@ namespace fci::arm
         SdkClientConnectedResponse = 0x620A,
         SdkClientDisconnectedRequest = 0x620B,
         SdkClientDisconnectedResponse = 0x620C,
-        HomeDoneRequest = 0x620D,
-        HomeDoneResponse = 0x620E,
         GetMotorFeedbackRequest = 0x6213,
         GetMotorFeedbackResponse = 0x6214,
         GetDeviceInfoRequest = 0x6215,
@@ -48,14 +44,6 @@ namespace fci::arm
         ArmControlModeResponse = 0x621A,
         GripperControlModeRequest = 0x621B,
         GripperControlModeResponse = 0x621C,
-        SetJointImpedanceRequest = 0x621D,
-        SetJointImpedanceResponse = 0x621E,
-        SetCartesianImpedanceRequest = 0x621F,
-        SetCartesianImpedanceResponse = 0x6220,
-        SetEEFrameRequest = 0x6221,
-        SetEEFrameResponse = 0x6222,
-        SetLoadRequest = 0x6223,
-        SetLoadResponse = 0x6224,
 
         // ── Real-time control (fire-and-forget, notification) ──
         JointMITCommand = 0x6301,
@@ -82,14 +70,6 @@ namespace fci::arm
     {
         Disable = 0,
         Enable = 1,
-    };
-
-    enum class SetMotorStateStatus : std::uint8_t
-    {
-        Ok = 0,
-        UnsupportedInCurrentMode = 1,
-        InvalidJoint = 2,
-        StorageFailed = 3,
     };
 
     enum class MotorControlMode : std::uint8_t
@@ -149,35 +129,6 @@ namespace fci::arm
     enum class SdkClientNotifyStatus : std::uint8_t
     {
         Ok = 0,
-    };
-
-    enum class HomeDoneStatus : std::uint8_t
-    {
-        Ok = 0,
-    };
-
-    enum class SetJointImpedanceStatus : std::uint8_t
-    {
-        Ok = 0,
-        StorageFailed = 1,
-    };
-
-    enum class SetCartesianImpedanceStatus : std::uint8_t
-    {
-        Ok = 0,
-        StorageFailed = 1,
-    };
-
-    enum class SetEEFrameStatus : std::uint8_t
-    {
-        Ok = 0,
-        StorageFailed = 1,
-    };
-
-    enum class SetLoadStatus : std::uint8_t
-    {
-        Ok = 0,
-        StorageFailed = 1,
     };
 
     constexpr std::uint16_t to_u16(Command value)
