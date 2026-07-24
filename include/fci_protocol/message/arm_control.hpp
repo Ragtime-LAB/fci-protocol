@@ -75,9 +75,13 @@ struct JointCommand {
 };
 
 struct GripperCommand {
+    PcControlKind control_kind{PcControlKind::None};
     float q{0.0f};
     float dq{0.0f};
     float tau{0.0f};
+    float kp{0.0f};
+    float kd{0.0f};
+    float aux{0.0f};
     std::uint8_t flags{0};
 };
 
