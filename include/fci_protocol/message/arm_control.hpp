@@ -13,8 +13,6 @@ enum class ModeRequestType : std::uint8_t {
     Drag,
     Home,
     Pc,
-    Estop,
-    StopPcControl,
 };
 
 enum class ModeRequestPriority : std::uint8_t {
