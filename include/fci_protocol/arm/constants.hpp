@@ -102,6 +102,52 @@ namespace fci::arm
         NotInDampMode = 3,
     };
 
+    enum class MotorRegister : std::uint8_t
+    {
+        // ── Motor Constants (R/W) ──
+        TorqueConstant         = 0x01,
+        GearEfficiency         = 0x1E,
+
+        // ── Control Loop Gains (R/W) ──
+        CurrentLoopBandwidth   = 0x18,
+        SpeedLoopKp            = 0x19,
+        SpeedLoopKi            = 0x1A,
+        PositionLoopKp         = 0x1B,
+        PositionLoopKi         = 0x1C,
+        SpeedLoopDamping       = 0x1F,
+        SpeedLoopFilterBW      = 0x20,
+        CurrentEnhanceFactor   = 0x21,
+        VelocityEnhanceFactor  = 0x22,
+
+        // ── Motion Protection (R/W) ──
+        VoltageUnder           = 0x00,
+        VoltageOver            = 0x1D,
+        TemperatureLimit       = 0x02,
+        OvercurrentLimit       = 0x03,
+        Acceleration           = 0x04,
+        Deceleration           = 0x05,
+        MaxSpeed               = 0x06,
+
+        // ── Mapping Ranges (R/W) ──
+        PositionMax            = 0x15,
+        VelocityMax            = 0x16,
+        TorqueMax              = 0x17,
+
+        // ── Read-Only Diagnostics ──
+        DampingCoefficient     = 0x0B,
+        Inertia                = 0x0C,
+        HardwareVersion        = 0x0D,
+        SoftwareVersion        = 0x0E,
+        PolePairs              = 0x10,
+        PhaseResistance        = 0x11,
+        PhaseInductance        = 0x12,
+        FluxLinkage            = 0x13,
+        GearRatio              = 0x14,
+        SubVersion             = 0x24,
+        MotorPosition          = 0x50,
+        OutputPosition         = 0x51,
+    };
+
     constexpr std::uint16_t to_u16(Command value)
     {
         return static_cast<std::uint16_t>(value);
