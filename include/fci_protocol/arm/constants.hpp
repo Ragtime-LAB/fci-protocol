@@ -44,6 +44,8 @@ namespace fci::arm
         ArmControlModeResponse = 0x621A,
         GripperControlModeRequest = 0x621B,
         GripperControlModeResponse = 0x621C,
+        SetArmModeRequest = 0x6225,
+        SetArmModeResponse = 0x6226,
 
         // ── Real-time control (fire-and-forget, notification) ──
         JointMITCommand = 0x6301,
@@ -119,6 +121,18 @@ namespace fci::arm
         CobotArm = 2,
     };
 
+    enum class ArmMode : std::uint8_t
+    {
+        Pc = 0,
+        Drag = 1,
+        Damp = 2,
+    };
+
+    enum class SetArmModeStatus : std::uint8_t
+    {
+        Ok = 0,
+    };
+
     enum class SdkClientNotifyStatus : std::uint8_t
     {
         Ok = 0,
@@ -140,6 +154,11 @@ namespace fci::arm
     }
 
     constexpr std::uint8_t to_u8(FirmwareType value)
+    {
+        return static_cast<std::uint8_t>(value);
+    }
+
+    constexpr std::uint8_t to_u8(ArmMode value)
     {
         return static_cast<std::uint8_t>(value);
     }

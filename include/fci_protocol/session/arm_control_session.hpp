@@ -19,6 +19,8 @@ using ArmControlSession = StreamSession<
     fci::arm::ArmControlModeResponsePacket,
     fci::arm::GripperControlModeRequestPacket,
     fci::arm::GripperControlModeResponsePacket,
+    fci::arm::SetArmModeRequestPacket,
+    fci::arm::SetArmModeResponsePacket,
     fci::arm::SetZeroRequestPacket,
     fci::arm::SetZeroResponsePacket,
     fci::arm::ClearErrorRequestPacket,

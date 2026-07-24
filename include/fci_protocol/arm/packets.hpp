@@ -78,6 +78,10 @@ struct GripperControlModeCommand {
     MotorControlMode mode;
 };
 
+struct SetArmModeCommand {
+    ArmMode mode;
+};
+
 struct SetZeroCommand {
     std::uint8_t joint_id;
 };
@@ -118,6 +122,10 @@ struct GripperControlModeResponse {
     GripperControlModeStatus status;
 };
 
+struct SetArmModeResponse {
+    SetArmModeStatus status;
+};
+
 struct SetZeroResponse {
     SetZeroStatus status;
 };
@@ -150,6 +158,11 @@ struct ArmControlModeRequestPacket {
 struct GripperControlModeRequestPacket {
     ReqId req_id;
     GripperControlModeCommand payload;
+};
+
+struct SetArmModeRequestPacket {
+    ReqId req_id;
+    SetArmModeCommand payload;
 };
 
 struct SetZeroRequestPacket {
@@ -199,6 +212,11 @@ struct ArmControlModeResponsePacket {
 struct GripperControlModeResponsePacket {
     ReqId req_id;
     GripperControlModeResponse payload;
+};
+
+struct SetArmModeResponsePacket {
+    ReqId req_id;
+    SetArmModeResponse payload;
 };
 
 struct SetZeroResponsePacket {
@@ -404,6 +422,24 @@ struct PacketTraits<fci::arm::GripperControlModeResponsePacket>
     : PacketTraitsBase<PacketTraits<fci::arm::GripperControlModeResponsePacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GripperControlModeResponse);
     static constexpr std::size_t size = sizeof(fci::arm::GripperControlModeResponsePacket);
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::SetArmModeRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::SetArmModeRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetArmModeRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::SetArmModeRequestPacket);
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
+};
+
+template <>
+struct PacketTraits<fci::arm::SetArmModeResponsePacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::SetArmModeResponsePacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetArmModeResponse);
+    static constexpr std::size_t size = sizeof(fci::arm::SetArmModeResponsePacket);
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
