@@ -126,6 +126,7 @@ namespace fci::arm
         Pc = 0,
         Drag = 1,
         Damp = 2,
+        Retracting = 3,
     };
 
     enum class SetArmModeStatus : std::uint8_t

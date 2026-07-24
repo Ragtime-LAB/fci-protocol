@@ -31,6 +31,7 @@ struct GripperStatus {
 };
 
 struct ArmStatus {
+    ArmMode mode;
     std::uint32_t seq;
     std::uint64_t timestamp_us;
     JointStatus status;
