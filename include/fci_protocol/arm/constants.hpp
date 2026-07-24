@@ -34,10 +34,15 @@ namespace fci::arm
         ArmControlModeRequest = 0x6219,
         GripperControlModeRequest = 0x621B,
         SetArmModeRequest = 0x6225,
+        MotorRegisterReadRequest = 0x621D,
+        MotorRegisterWriteRequest = 0x621F,
+        MotorStoreParamsRequest = 0x6221,
+        MotorSetZeroRequest = 0x6223,
 
         // ── Data-carrying responses (not covered by Ack) ──
         GetMotorFeedbackResponse = 0x6214,
         GetDeviceInfoResponse = 0x6216,
+        MotorRegisterReadResponse = 0x621E,
 
         // ── Real-time control (fire-and-forget, notification) ──
         JointMITCommand = 0x6301,
@@ -87,6 +92,14 @@ namespace fci::arm
     {
         Ok = 0,
         Failed = 1,
+    };
+
+    enum class MotorRegisterStatus : std::uint8_t
+    {
+        Ok = 0,
+        InvalidJoint = 1,
+        Timeout = 2,
+        NotInDampMode = 3,
     };
 
     constexpr std::uint16_t to_u16(Command value)

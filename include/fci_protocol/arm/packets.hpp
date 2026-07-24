@@ -115,15 +115,34 @@ struct GetMotorFeedbackCommand {
 //  Response payloads
 // ──────────────────────────────────────────────
 
-
-
-
-
-
-
-
 struct GetMotorFeedbackResponse {
     MotorFeedbackArray motors;
+};
+
+struct MotorRegisterReadCommand {
+    std::uint8_t joint_id;
+    std::uint8_t rid;
+};
+
+struct MotorRegisterWriteCommand {
+    std::uint8_t joint_id;
+    std::uint8_t rid;
+    float value;
+};
+
+struct MotorStoreParamsCommand {
+    std::uint8_t joint_id;
+};
+
+struct MotorSetZeroCommand {
+    std::uint8_t joint_id;
+};
+
+struct MotorRegisterReadResponse {
+    std::uint8_t joint_id;
+    std::uint8_t rid;
+    float value;
+    MotorRegisterStatus status;
 };
 
 // ──────────────────────────────────────────────
@@ -180,21 +199,38 @@ struct GetMotorFeedbackRequestPacket {
     GetMotorFeedbackCommand payload;
 };
 
+struct MotorRegisterReadRequestPacket {
+    ReqId req_id;
+    MotorRegisterReadCommand payload;
+};
+
+struct MotorRegisterWriteRequestPacket {
+    ReqId req_id;
+    MotorRegisterWriteCommand payload;
+};
+
+struct MotorStoreParamsRequestPacket {
+    ReqId req_id;
+    MotorStoreParamsCommand payload;
+};
+
+struct MotorSetZeroRequestPacket {
+    ReqId req_id;
+    MotorSetZeroCommand payload;
+};
+
 // ──────────────────────────────────────────────
 //  Response packets (firmware → host)
 // ──────────────────────────────────────────────
 
-
-
-
-
-
-
-
-
 struct GetMotorFeedbackResponsePacket {
     ReqId req_id;
     GetMotorFeedbackResponse payload;
+};
+
+struct MotorRegisterReadResponsePacket {
+    ReqId req_id;
+    MotorRegisterReadResponse payload;
 };
 
 // ──────────────────────────────────────────────
@@ -435,6 +471,51 @@ struct PacketTraits<fci::arm::GetMotorFeedbackResponsePacket>
     static constexpr std::size_t size = sizeof(fci::arm::GetMotorFeedbackResponsePacket);
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::MotorRegisterReadRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::MotorRegisterReadRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::MotorRegisterReadRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::MotorRegisterReadRequestPacket);
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
+};
+
+template <>
+struct PacketTraits<fci::arm::MotorRegisterReadResponsePacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::MotorRegisterReadResponsePacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::MotorRegisterReadResponse);
+    static constexpr std::size_t size = sizeof(fci::arm::MotorRegisterReadResponsePacket);
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::MotorRegisterWriteRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::MotorRegisterWriteRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::MotorRegisterWriteRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::MotorRegisterWriteRequestPacket);
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
+};
+
+template <>
+struct PacketTraits<fci::arm::MotorStoreParamsRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::MotorStoreParamsRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::MotorStoreParamsRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::MotorStoreParamsRequestPacket);
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
+};
+
+template <>
+struct PacketTraits<fci::arm::MotorSetZeroRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::MotorSetZeroRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::MotorSetZeroRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::MotorSetZeroRequestPacket);
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
 };
 
 template <>
