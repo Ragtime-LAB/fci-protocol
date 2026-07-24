@@ -13,7 +13,6 @@ enum class ModeRequestType : std::uint8_t {
     Drag,
     Home,
     Pc,
-    PowerOff,
     Estop,
     StopPcControl,
 };
