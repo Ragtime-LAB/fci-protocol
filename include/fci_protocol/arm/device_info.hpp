@@ -62,18 +62,9 @@ enum class SetDeviceInfoStatus : std::uint8_t {
     NameTooLong = 2,
 };
 
-struct SetDeviceInfoResponse {
-    SetDeviceInfoStatus status;
-};
-
 struct SetDeviceInfoRequestPacket {
     ReqId req_id;
     SetDeviceInfoCommand payload;
-};
-
-struct SetDeviceInfoResponsePacket {
-    ReqId req_id;
-    SetDeviceInfoResponse payload;
 };
 
 } // namespace fci::arm

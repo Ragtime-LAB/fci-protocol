@@ -21,31 +21,23 @@ namespace fci::arm
         // ── Ack ──
         Ack = 0x6FF0,
 
-        // ── Reliable request / response pairs ──
+        // ── Reliable requests (response via Ack status) ──
         SetZeroRequest = 0x6107,
-        SetZeroResponse = 0x6108,
         ClearErrorRequest = 0x6109,
-        ClearErrorResponse = 0x610A,
         HomeAllRequest = 0x6201,
-        HomeAllResponse = 0x6202,
         ClearFaultsRequest = 0x6205,
-        ClearFaultsResponse = 0x6206,
         SdkClientConnectedRequest = 0x6209,
-        SdkClientConnectedResponse = 0x620A,
         SdkClientDisconnectedRequest = 0x620B,
-        SdkClientDisconnectedResponse = 0x620C,
         GetMotorFeedbackRequest = 0x6213,
-        GetMotorFeedbackResponse = 0x6214,
         GetDeviceInfoRequest = 0x6215,
-        GetDeviceInfoResponse = 0x6216,
         SetDeviceInfoRequest = 0x6217,
-        SetDeviceInfoResponse = 0x6218,
         ArmControlModeRequest = 0x6219,
-        ArmControlModeResponse = 0x621A,
         GripperControlModeRequest = 0x621B,
-        GripperControlModeResponse = 0x621C,
         SetArmModeRequest = 0x6225,
-        SetArmModeResponse = 0x6226,
+
+        // ── Data-carrying responses (not covered by Ack) ──
+        GetMotorFeedbackResponse = 0x6214,
+        GetDeviceInfoResponse = 0x6216,
 
         // ── Real-time control (fire-and-forget, notification) ──
         JointMITCommand = 0x6301,
@@ -75,45 +67,6 @@ namespace fci::arm
         PVT = 4,
     };
 
-    enum class ArmControlModeStatus : std::uint8_t
-    {
-        Ok = 0,
-        UnsupportedInCurrentMode = 1,
-        InvalidJoint = 2,
-        InvalidMode = 3,
-        CanTxFailed = 4,
-    };
-
-    enum class GripperControlModeStatus : std::uint8_t
-    {
-        Ok = 0,
-    };
-
-    enum class SetZeroStatus : std::uint8_t
-    {
-        Ok = 0,
-        InvalidJoint = 1,
-        CalibrationFailed = 2,
-    };
-
-    enum class ClearErrorStatus : std::uint8_t
-    {
-        Ok = 0,
-        InvalidJoint = 1,
-    };
-
-    enum class HomeAllStatus : std::uint8_t
-    {
-        Ok = 0,
-        NotIdle = 1,
-        CalibrationFailed = 2,
-    };
-
-    enum class ClearFaultsStatus : std::uint8_t
-    {
-        Ok = 0,
-    };
-
     enum class FirmwareType : std::uint8_t
     {
         StandardArm = 0,
@@ -129,14 +82,11 @@ namespace fci::arm
         Retracting = 3,
     };
 
-    enum class SetArmModeStatus : std::uint8_t
+    // Ack status — unified across all Request packets
+    enum class AckStatus : std::uint8_t
     {
         Ok = 0,
-    };
-
-    enum class SdkClientNotifyStatus : std::uint8_t
-    {
-        Ok = 0,
+        Failed = 1,
     };
 
     constexpr std::uint16_t to_u16(Command value)

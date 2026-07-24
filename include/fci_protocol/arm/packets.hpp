@@ -115,33 +115,12 @@ struct GetMotorFeedbackCommand {
 //  Response payloads
 // ──────────────────────────────────────────────
 
-struct ArmControlModeResponse {
-    ArmControlModeStatus status;
-};
 
-struct GripperControlModeResponse {
-    GripperControlModeStatus status;
-};
 
-struct SetArmModeResponse {
-    SetArmModeStatus status;
-};
 
-struct SetZeroResponse {
-    SetZeroStatus status;
-};
 
-struct ClearErrorResponse {
-    ClearErrorStatus status;
-};
 
-struct ClearFaultsResponse {
-    ClearFaultsStatus status;
-};
 
-struct SdkClientNotifyResponse {
-    SdkClientNotifyStatus status;
-};
 
 struct GetMotorFeedbackResponse {
     MotorFeedbackArray motors;
@@ -205,45 +184,13 @@ struct GetMotorFeedbackRequestPacket {
 //  Response packets (firmware → host)
 // ──────────────────────────────────────────────
 
-struct ArmControlModeResponsePacket {
-    ReqId req_id;
-    ArmControlModeResponse payload;
-};
 
-struct GripperControlModeResponsePacket {
-    ReqId req_id;
-    GripperControlModeResponse payload;
-};
 
-struct SetArmModeResponsePacket {
-    ReqId req_id;
-    SetArmModeResponse payload;
-};
 
-struct SetZeroResponsePacket {
-    ReqId req_id;
-    SetZeroResponse payload;
-};
 
-struct ClearErrorResponsePacket {
-    ReqId req_id;
-    ClearErrorResponse payload;
-};
 
-struct ClearFaultsResponsePacket {
-    ReqId req_id;
-    ClearFaultsResponse payload;
-};
 
-struct SdkClientConnectedResponsePacket {
-    ReqId req_id;
-    SdkClientNotifyResponse payload;
-};
 
-struct SdkClientDisconnectedResponsePacket {
-    ReqId req_id;
-    SdkClientNotifyResponse payload;
-};
 
 struct GetMotorFeedbackResponsePacket {
     ReqId req_id;
@@ -401,30 +348,12 @@ struct PacketTraits<fci::arm::ArmControlModeRequestPacket>
 };
 
 template <>
-struct PacketTraits<fci::arm::ArmControlModeResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::ArmControlModeResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ArmControlModeResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::ArmControlModeResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
-};
-
-template <>
 struct PacketTraits<fci::arm::GripperControlModeRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::GripperControlModeRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GripperControlModeRequest);
     static constexpr std::size_t size = sizeof(fci::arm::GripperControlModeRequestPacket);
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
-};
-
-template <>
-struct PacketTraits<fci::arm::GripperControlModeResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::GripperControlModeResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GripperControlModeResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::GripperControlModeResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
 };
 
 template <>
@@ -437,15 +366,6 @@ struct PacketTraits<fci::arm::SetArmModeRequestPacket>
 };
 
 template <>
-struct PacketTraits<fci::arm::SetArmModeResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::SetArmModeResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetArmModeResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::SetArmModeResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
-};
-
-template <>
 struct PacketTraits<fci::arm::SetZeroRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetZeroRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetZeroRequest);
@@ -455,30 +375,12 @@ struct PacketTraits<fci::arm::SetZeroRequestPacket>
 };
 
 template <>
-struct PacketTraits<fci::arm::SetZeroResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::SetZeroResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetZeroResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::SetZeroResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
-};
-
-template <>
 struct PacketTraits<fci::arm::ClearErrorRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::ClearErrorRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ClearErrorRequest);
     static constexpr std::size_t size = sizeof(fci::arm::ClearErrorRequestPacket);
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
-};
-
-template <>
-struct PacketTraits<fci::arm::ClearErrorResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::ClearErrorResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ClearErrorResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::ClearErrorResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
 };
 
 template <>
@@ -500,15 +402,6 @@ struct PacketTraits<fci::arm::ClearFaultsRequestPacket>
 };
 
 template <>
-struct PacketTraits<fci::arm::ClearFaultsResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::ClearFaultsResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ClearFaultsResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::ClearFaultsResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
-};
-
-template <>
 struct PacketTraits<fci::arm::SdkClientConnectedRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SdkClientConnectedRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SdkClientConnectedRequest);
@@ -518,30 +411,12 @@ struct PacketTraits<fci::arm::SdkClientConnectedRequestPacket>
 };
 
 template <>
-struct PacketTraits<fci::arm::SdkClientConnectedResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::SdkClientConnectedResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SdkClientConnectedResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::SdkClientConnectedResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
-};
-
-template <>
 struct PacketTraits<fci::arm::SdkClientDisconnectedRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SdkClientDisconnectedRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SdkClientDisconnectedRequest);
     static constexpr std::size_t size = sizeof(fci::arm::SdkClientDisconnectedRequestPacket);
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
-};
-
-template <>
-struct PacketTraits<fci::arm::SdkClientDisconnectedResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::SdkClientDisconnectedResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SdkClientDisconnectedResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::SdkClientDisconnectedResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
 };
 
 template <>
@@ -642,17 +517,6 @@ struct PacketTraits<fci::arm::SetDeviceInfoRequestPacket>
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };
-
-template <>
-struct PacketTraits<fci::arm::SetDeviceInfoResponsePacket>
-    : PacketTraitsBase<PacketTraits<fci::arm::SetDeviceInfoResponsePacket>> {
-    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetDeviceInfoResponse);
-    static constexpr std::size_t size = sizeof(fci::arm::SetDeviceInfoResponsePacket);
-    using Protocol = USBBaseProto;
-    static constexpr PacketCategory category = PacketCategory::Notification;
-};
-
-// ── New: CartesianPoseCommand / CartesianVelocityCommand ──
 
 template <>
 struct PacketTraits<fci::arm::CartesianPoseCommandPacket>
