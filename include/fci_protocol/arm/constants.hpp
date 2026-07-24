@@ -59,16 +59,6 @@ namespace fci::arm
         GripperPVTCommand = 0x6313,
     };
 
-    // ── Overall arm FSM ──
-    enum class ArmMode : std::uint8_t
-    {
-        Init = 0,
-        Idle = 1,
-        Running = 2,
-        Fault = 3,
-        EStop = 4,
-    };
-
     enum class MotorStateValue : std::uint8_t
     {
         Disable = 0,
@@ -137,11 +127,6 @@ namespace fci::arm
     constexpr std::uint16_t to_u16(Command value)
     {
         return static_cast<std::uint16_t>(value);
-    }
-
-    constexpr std::uint8_t to_u8(ArmMode value)
-    {
-        return static_cast<std::uint8_t>(value);
     }
 
     constexpr std::uint8_t to_u8(MotorStateValue value)
