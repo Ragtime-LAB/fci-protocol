@@ -97,7 +97,7 @@ private:
     bool resolved;
   };
   std::array<PendingRequest, 256> pending_{};
-  uint8_t next_id_{0};
+  uint8_t next_id_{1};
 };
 
 } // namespace RPL
