@@ -14,6 +14,7 @@ using ArmControlSession = StreamSession<
     fci::arm::ArmStatus,
     fci::arm::MotorFeedbackArray,
     fci::arm::GripperStatus,
+    fci::arm::ArmDiagnostics,
     fci::arm::AckPacket,
     fci::arm::ArmControlModeRequestPacket,
     fci::arm::GripperControlModeRequestPacket,

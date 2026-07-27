@@ -17,6 +17,7 @@ namespace fci::arm
         ArmStatus = 0x6001,
         MotorFeedbackArray = 0x6002,
         GripperStatus = 0x6003,
+        ArmDiagnostics = 0x6004,
 
         // ── Ack ──
         Ack = 0x6FF0,

@@ -30,6 +30,36 @@ struct GripperStatus {
     float tau;
 };
 
+struct JointDiag {
+    std::uint8_t status;
+    std::uint8_t healthy;
+    std::uint8_t health_state;
+    std::uint8_t recovery_phase;
+    std::uint16_t rx_age_ms;
+};
+
+struct GripperDiag {
+    std::uint8_t healthy;
+    std::uint8_t health_state;
+    std::uint8_t recovery_phase;
+    std::uint16_t rx_age_ms;
+};
+
+struct ArmDiagnostics {
+    std::uint32_t uptime_s;
+    std::uint32_t tick_count;
+    std::uint32_t mode_entry_ms;
+    std::uint8_t bus_healthy;
+    std::uint8_t bus_state;
+    std::uint8_t recovery_count;
+    std::uint16_t tx_err_count;
+    std::uint16_t rx_err_count;
+    std::uint8_t unhealthy_joint_count;
+    std::uint8_t pending_cmd_count;
+    JointDiag joints[6];
+    GripperDiag gripper;
+};
+
 struct ArmStatus {
     ArmMode mode;
     std::uint32_t seq;
@@ -361,6 +391,15 @@ struct PacketTraits<fci::arm::GripperStatus>
     : PacketTraitsBase<PacketTraits<fci::arm::GripperStatus>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GripperStatus);
     static constexpr std::size_t size = sizeof(fci::arm::GripperStatus);
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::ArmDiagnostics>
+    : PacketTraitsBase<PacketTraits<fci::arm::ArmDiagnostics>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::ArmDiagnostics);
+    static constexpr std::size_t size = sizeof(fci::arm::ArmDiagnostics);
     using Protocol = USBBaseProto;
     static constexpr PacketCategory category = PacketCategory::Notification;
 };
