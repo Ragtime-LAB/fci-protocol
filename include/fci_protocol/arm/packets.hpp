@@ -3,6 +3,7 @@
 
 #include "fci_protocol/arm/constants.hpp"
 #include "fci_protocol/arm/device_info.hpp"
+#include "fci_protocol/arm/diagnostics.hpp"
 #include "RPL/Meta/PacketTraits.hpp"
 #include "RPL/Packets/USBAck.hpp"
 
@@ -28,36 +29,6 @@ struct GripperStatus {
     float q;
     float dq;
     float tau;
-};
-
-struct JointDiag {
-    std::uint8_t status;
-    std::uint8_t healthy;
-    std::uint8_t health_state;
-    std::uint8_t recovery_phase;
-    std::uint16_t rx_age_ms;
-};
-
-struct GripperDiag {
-    std::uint8_t healthy;
-    std::uint8_t health_state;
-    std::uint8_t recovery_phase;
-    std::uint16_t rx_age_ms;
-};
-
-struct ArmDiagnostics {
-    std::uint32_t uptime_s;
-    std::uint32_t tick_count;
-    std::uint32_t mode_entry_ms;
-    std::uint8_t bus_healthy;
-    std::uint8_t bus_state;
-    std::uint8_t recovery_count;
-    std::uint16_t tx_err_count;
-    std::uint16_t rx_err_count;
-    std::uint8_t unhealthy_joint_count;
-    std::uint8_t pending_cmd_count;
-    JointDiag joints[6];
-    GripperDiag gripper;
 };
 
 struct ArmStatus {
