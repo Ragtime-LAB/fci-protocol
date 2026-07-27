@@ -11,10 +11,12 @@ namespace fci::arm {
 
 struct JointDiag {
     std::uint8_t healthy;
+    float temp_c;
 };
 
 struct GripperDiag {
     std::uint8_t healthy;
+    float temp_c;
 };
 
 struct ArmDiagnostics {
