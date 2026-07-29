@@ -21,7 +21,6 @@ struct DeviceInfo {
     std::array<char, 32> board_name;
     std::array<char, 32> custom_name;
     std::uint8_t fw_type;          // FirmwareType enum
-    std::uint32_t firmware_dt_us;  // firmware control period (e.g. 2000 = 500 Hz)
 };
 
 // ──────────────────────────────────────────────
@@ -52,7 +51,6 @@ struct GetDeviceInfoResponsePacket {
 
 struct SetDeviceInfoCommand {
     std::array<char, 32> custom_name;
-    std::uint32_t firmware_dt_us;   // 0 means "keep current value"
     std::uint8_t fw_type;           // 0xFF means "keep current value"
 };
 
