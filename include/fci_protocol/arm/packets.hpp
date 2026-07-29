@@ -3,6 +3,7 @@
 
 #include "fci_protocol/arm/constants.hpp"
 #include "fci_protocol/arm/device_info.hpp"
+#include "fci_protocol/arm/device_settings.hpp"
 #include "fci_protocol/arm/diagnostics.hpp"
 #include "RPL/Meta/PacketTraits.hpp"
 #include "RPL/Packets/USBAck.hpp"
@@ -605,6 +606,33 @@ struct PacketTraits<fci::arm::SetDeviceInfoRequestPacket>
     : PacketTraitsBase<PacketTraits<fci::arm::SetDeviceInfoRequestPacket>> {
     static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetDeviceInfoRequest);
     static constexpr std::size_t size = sizeof(fci::arm::SetDeviceInfoRequestPacket);
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
+};
+
+template <>
+struct PacketTraits<fci::arm::GetDeviceSettingsRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::GetDeviceSettingsRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GetDeviceSettingsRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::GetDeviceSettingsRequestPacket);
+    using Protocol = USBRequestProto;
+    static constexpr PacketCategory category = PacketCategory::Request;
+};
+
+template <>
+struct PacketTraits<fci::arm::GetDeviceSettingsResponsePacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::GetDeviceSettingsResponsePacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::GetDeviceSettingsResponse);
+    static constexpr std::size_t size = sizeof(fci::arm::GetDeviceSettingsResponsePacket);
+    using Protocol = USBBaseProto;
+    static constexpr PacketCategory category = PacketCategory::Notification;
+};
+
+template <>
+struct PacketTraits<fci::arm::SetDeviceSettingsRequestPacket>
+    : PacketTraitsBase<PacketTraits<fci::arm::SetDeviceSettingsRequestPacket>> {
+    static constexpr std::uint16_t cmd = fci::arm::to_u16(fci::arm::Command::SetDeviceSettingsRequest);
+    static constexpr std::size_t size = sizeof(fci::arm::SetDeviceSettingsRequestPacket);
     using Protocol = USBRequestProto;
     static constexpr PacketCategory category = PacketCategory::Request;
 };

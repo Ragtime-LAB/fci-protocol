@@ -4,6 +4,7 @@
 #include "fci_protocol/arm/constants.hpp"
 #include "fci_protocol/arm/packets.hpp"
 #include "fci_protocol/arm/device_info.hpp"
+#include "fci_protocol/arm/device_settings.hpp"
 
 namespace fci::message {
 

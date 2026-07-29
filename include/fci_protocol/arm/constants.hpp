@@ -32,6 +32,8 @@ namespace fci::arm
         GetMotorFeedbackRequest = 0x6213,
         GetDeviceInfoRequest = 0x6215,
         SetDeviceInfoRequest = 0x6217,
+        GetDeviceSettingsRequest = 0x6228,
+        SetDeviceSettingsRequest = 0x622A,
         ArmControlModeRequest = 0x6219,
         GripperControlModeRequest = 0x621B,
         SetArmModeRequest = 0x6225,
@@ -43,6 +45,7 @@ namespace fci::arm
         // ── Data-carrying responses (not covered by Ack) ──
         GetMotorFeedbackResponse = 0x6214,
         GetDeviceInfoResponse = 0x6216,
+        GetDeviceSettingsResponse = 0x6229,
         MotorRegisterReadResponse = 0x621E,
 
         // ── Real-time control (fire-and-forget, notification) ──
