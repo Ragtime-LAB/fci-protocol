@@ -46,6 +46,7 @@ enum class CommandKind : std::uint8_t {
     JointCommand,
     GripperCommand,
     SessionEvent,
+    ControlMode,
 };
 
 struct ModeCommand {
@@ -57,6 +58,11 @@ struct ModeCommand {
 struct SessionCommand {
     SessionEventType type{SessionEventType::None};
     std::uint8_t flags{0};
+};
+
+struct ControlModeCommand {
+    std::uint8_t mode{0};
+    bool gripper{false};
 };
 
 struct JointCommand {
@@ -87,6 +93,7 @@ struct ArmCommandMsg {
     std::uint8_t reserved[3]{};
     ModeCommand mode{};
     SessionCommand session{};
+    ControlModeCommand control_mode{};
     JointCommand joint{};
     GripperCommand gripper{};
 };
