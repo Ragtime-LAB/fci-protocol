@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <array>
+#include <utility>
 
 #include "fci_protocol/arm/constants.hpp"
 
@@ -30,6 +31,7 @@ namespace fci::arm
         std::uint32_t firmware_dt_us;       // control period in us (e.g. 2000 = 500 Hz)
         std::array<float, 6> gravity_scale; // gravity compensation scale per joint
         std::array<TorqueFoldParams, 7> torque_fold; // torque folding params for 6 joints + 1 claw
+        std::array<std::pair<float, float>, 6> joint_limits; // [min, max] rad per joint
     };
 
     // ──────────────────────────────────────────────
